@@ -45,11 +45,11 @@ void pfRead(){
   TH1F hdifpt("hdifpt", "difference pt;pt [GeV/c];dN/dpt", 1000, -.4, .4);
   TH1F hdifp("hdifp", "difference p;p [GeV/c];dN/dp", 1000, -.8, .8);
   //correlations
-  TH2F hcorpx("hcorpx", "correlations px; candidate, simulated", 1000, -3, 3,  1000, -3, 3);
-  TH2F hcorpy("hcorpy", "correlations py; candidate, simulated", 1000, -3, 3,  1000, -3, 3);
-  TH2F hcorpz("hcorpz", "correlations pz; candidate, simulated", 1000, 0, 14,  1000, 0, 14);
-  TH2F hcorpt("hcorpt", "correlations pt; candidate, simulated", 1000, -1, 3,  1000, -1, 3);
-  TH2F hcorp("hcorp", "correlations p; candidate, simulated", 1000, 0, 14,  1000, 0, 14);
+  TH2F hcorpx("hcorpx", "correlations px; candidate; simulated", 1000, -3, 3,  1000, -3, 3);
+  TH2F hcorpy("hcorpy", "correlations py; candidate; simulated", 1000, -3, 3,  1000, -3, 3);
+  TH2F hcorpz("hcorpz", "correlations pz; candidate; simulated", 1000, 0, 14,  1000, 0, 14);
+  TH2F hcorpt("hcorpt", "correlations pt; candidate; simulated", 1000, -1, 3,  1000, -1, 3);
+  TH2F hcorp("hcorp", "correlations p; candidate; simulated", 1000, 0, 14,  1000, 0, 14);
 
   for(int i=0; i<Nevents; i++){
     treeIn -> GetEntry(i);
