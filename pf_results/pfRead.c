@@ -2,23 +2,20 @@ void pfRead(const char *fileName, const char *outputFileName){
 
   TFile* fileInPF = TFile::Open(fileName, "read");
   TTree* treeInPF = fileInPF->Get<TTree>("aTree");
-  //simulated particles
-  AnalysisTree::Chain* treeInSIM = new AnalysisTree::Chain(std::vector<std::string>({"fileslist.txt"}), std::vector<std::string>({"rTree"}));
 
   //setting headers type
   auto* can_header = new AnalysisTree::Particles();
   auto* simr_header = new AnalysisTree::Particles(); //reconstructed
   auto* can2simr_matching = new AnalysisTree::Matching();
-  auto* sims_tracks = new AnalysisTree::Particles(); //simulation
 
+  //getting variables id
   AnalysisTree::Configuration* config = fileInPF->Get<AnalysisTree::Configuration>("Configuration");
   //headers for branches
   treeInPF->SetBranchAddress("Candidates", &can_header);
   treeInPF->SetBranchAddress("Simulated", &simr_header);
   treeInPF->SetBranchAddress(config->GetMatchName("Candidates", "Simulated").c_str(), &can2simr_matching);
-  treeInSIM->SetBranchAddress("SimParticles", &sims_tracks);
+  //treeInSIM->SetBranchAddress("SimParticles", &sims_tracks);
 
-  //getting variables id
   //Candidates reconstructed
   const int canpx = config->GetBranchConfig("Candidates").GetFieldId("px");
   const int canpy = config->GetBranchConfig("Candidates").GetFieldId("py");
@@ -38,17 +35,7 @@ void pfRead(const char *fileName, const char *outputFileName){
   const int simrpz = config->GetBranchConfig("Simulated").GetFieldId("pz");
   const int simrpt = config->GetBranchConfig("Simulated").GetFieldId("pT");
   const int simrp = config->GetBranchConfig("Simulated").GetFieldId("p");
-  //simulated Simulated
-  const int simspx = treeInSIM->GetConfiguration()->GetBranchConfig("SimParticles").GetFieldId("px");
-  const int simspy = treeInSIM->GetConfiguration()->GetBranchConfig("SimParticles").GetFieldId("py");
-  const int simspz = treeInSIM->GetConfiguration()->GetBranchConfig("SimParticles").GetFieldId("pz");
-  const int simspt = treeInSIM->GetConfiguration()->GetBranchConfig("SimParticles").GetFieldId("pT");
-  const int simsp = treeInSIM->GetConfiguration()->GetBranchConfig("SimParticles").GetFieldId("p");
-  const int simsrap = treeInSIM->GetConfiguration()->GetBranchConfig("SimParticles").GetFieldId("rapidity");
-  const int simsphi = treeInSIM->GetConfiguration()->GetBranchConfig("SimParticles").GetFieldId("phi");
-  const int simspid = treeInSIM->GetConfiguration()->GetBranchConfig("SimParticles").GetFieldId("pid");
 
-  TFile* fileOut1 = TFile::Open(outputFileName, "recreate");
   //Candidates
   TH1F hcanpx("hcanpx", "candidate px;px [GeV/c];dN/dpx", 100, -3, 3);
   TH1F hcanpy("hcanpy", "candidate py;py [GeV/c];dN/dpy", 100, -3, 3);
@@ -56,12 +43,6 @@ void pfRead(const char *fileName, const char *outputFileName){
   TH1F hcanpt("hcanpt", "candidate pt;pt [GeV/c];dN/dpt", 100, -1, 3);
   TH1F hcanp("hcanp", "candidate p;p [GeV/c];dN/dp", 100, 0, 14);
   TH1F hcanphi("hcanphi", "candidate #phi;#phi [rad];dN/d#phi", 100, -3.14, 3.14);
-  //simulated
-  TH1F hsimspx("hsimspx", "simulated px;px [GeV/c];dN/dpx", 100, -3, 3);
-  TH1F hsimspy("hsimspy", "simulated py;py [GeV/c];dN/dpy", 100, -3, 3);
-  TH1F hsimspz("hsimspz", "simulated pz;pz [GeV/c];dN/dpz", 100, 0, 14);
-  TH1F hsimspt("hsimspt", "simulated pt;pt [GeV/c];dN/dpt", 100, -1, 3);
-  TH1F hsimsp("hsimsp", "simulated p;p [GeV/c];dN/dp", 100, 0, 14);
   //difference
   TH1F hdifpx("hdifpx", "difference px;px [GeV/c];dN/dpx", 100, -.4, .4);
   TH1F hdifpy("hdifpy", "difference py;py [GeV/c];dN/dpy", 100, -.4, .4);
@@ -77,46 +58,34 @@ void pfRead(const char *fileName, const char *outputFileName){
   TH2F hcorp("hcorp", "correlations p; candidate; simulated", 100, 0, 14,  100, 0, 14);
   TH2F hcorr_rap_pt("hcorr_rap_pt", "correlation rec rapidity pt; rapidity; pT", 100, -1, 4,  100, -1, 4);
   TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation rec #phi pt; #phi; pT", 100, -5, 5,  100, -5, 5);
-  //correlations for sim
-  TH2F hcors_rap_pt("hcors_rap_pt", "correlation sim rapidity pt; rapidity; pT", 100, -1, 4,  100, -1, 4);
-  TH2F hcors_phi_pt("hcors_phi_pt", "correlation sim #phi pt; #phi; pT", 100, -5, 5,  100, -5, 5);
-  TH2F hcors_px_py("hcors_px_py", "correlations sim px py; px; py", 100, -3, 3,  100, -3, 3);
   //chi2
   TH1F hchi2_geo("chi2_geo", "chi2_geo", 100, -1, 6);
   TH1F hchi2_prim_first("chi2_prim_first", "chi2_prim_first", 100, -1, 300);
   TH1F hchi2_prim_second("chi2_prim_second", "chi2_prim_second", 100, -1, 300);
   TH1F hchi2_topo("chi2_topo", "chi2_topo", 100, -1, 10);
 
+  //reading of data from simulated histogramsfile
+  TFile simFile("simulatedHistograms.root"); 
+  TH1F* hsimspx;
+  TH1F* hsimspy;
+  TH1F* hsimspz;
+  TH1F* hsimspt;
+  TH1F* hsimsp;
+  //correlations for sim
+  TH2F* hcors_rap_pt;
+  TH2F* hcors_phi_pt;
+  TH2F* hcors_px_py;
+  simFile.GetObject("hsimspx",hsimspx);
+  simFile.GetObject("hsimspy",hsimspy);
+  simFile.GetObject("hsimspz",hsimspz);
+  simFile.GetObject("hsimspt",hsimspt);
+  simFile.GetObject("hsimsp",hsimsp);
+  simFile.GetObject("hcors_rap_pt",hcors_rap_pt);
+  simFile.GetObject("hcors_phi_pt",hcors_phi_pt);
+  simFile.GetObject("hcors_px_py",hcors_px_py);
+  simFile.Close();
 
-  //reading of data
-
-  //simulation
-  const int NeventsSIM = treeInSIM->GetEntries();
-  for(int i=0; i<NeventsSIM; i++){
-    treeInSIM -> GetEntry(i);
-    //simulated simulated
-    for(const auto& sim_track : *(sims_tracks->GetChannels()) ){
-      if (sim_track.GetField<int>(simspid) == 3122){
-        const float sims_px = sim_track.GetField<float>(simspx);
-        const float sims_py = sim_track.GetField<float>(simspy);
-        const float sims_pz = sim_track.GetField<float>(simspz);
-        const float sims_pt = sim_track.GetField<float>(simspt);
-        const float sims_p = sim_track.GetField<float>(simsp);
-        const float sims_rap = sim_track.GetField<float>(simsrap);
-        const float sims_phi = sim_track.GetField<float>(simsphi);
-        hsimspx.Fill(sims_px);
-        hsimspy.Fill(sims_py);
-        hsimspz.Fill(sims_pz);
-        hsimspt.Fill(sims_pt);
-        hsimsp.Fill(sims_p);
-        //correlations for simulated
-        hcors_rap_pt.Fill(sims_rap, sims_pt);
-        hcors_px_py.Fill(sims_px, sims_py);
-        hcors_phi_pt.Fill(sims_phi, sims_pt);
-      }
-    }
-  }
-
+    //reading data from pfsimple file
     //pfsimple
     const int NeventsPF = treeInPF->GetEntries();
     for(int i=0; i<NeventsPF; i++){
@@ -175,9 +144,9 @@ void pfRead(const char *fileName, const char *outputFileName){
     }
   }
   //division of histograms
-//  TH2F hcord_rap_pt("hcord_rap_pt", "division correlation rapidity pt; rapidity; pT", 100, -1, 4,  100, -1, 4);
-//  TH2F hcord_phi_pt("hcord_rap_pt", "division correlation #phi pt; #phi; pT", 100, -5, 5,  100, -5, 5);
-//  TH2F hcord_px_py("hcord_px_py", "division correlations px py; px; py", 100, -3, 3,  100, -3, 3);
+//  TH2F* hcord_rap_pt = new TH2F("hcord_rap_pt", "division correlation rapidity pt; rapidity; pT", 100, -1, 4,  100, -1, 4);
+//  TH2F* hcord_phi_pt = new TH2F("hcord_rap_pt", "division correlation #phi pt; #phi; pT", 100, -5, 5,  100, -5, 5);
+//  TH2F* hcord_px_py = new TH2F("hcord_px_py", "division correlations px py; px; py", 100, -3, 3,  100, -3, 3);
 //  hcord_rap_pt = (TH2F*) hcorr_rap_pt.Clone();
 //  hcord_rap_pt->Divide(hcors_rap_pt);
 //  hcord_phi_pt = (TH2F*) hcorr_phi_pt.Clone();
@@ -185,16 +154,18 @@ void pfRead(const char *fileName, const char *outputFileName){
 //  hcord_px_py = (TH2F*) hcorr_px_py.Clone();
 //  hcord_px_py->Divide(hcors_px_py);
 
+  TFile* fileOut1 = TFile::Open(outputFileName, "recreate");
+
   hcanpx.Write();
   hcanpy.Write();
   hcanpz.Write();
   hcanpt.Write();
   hcanp.Write();
-  hsimspx.Write();
-  hsimspy.Write();
-  hsimspz.Write();
-  hsimspt.Write();
-  hsimsp.Write();
+  hsimspx->Write();
+  hsimspy->Write();
+  hsimspz->Write();
+  hsimspt->Write();
+  hsimsp->Write();
   hdifpx.Write();
   hdifpy.Write();
   hdifpz.Write();
@@ -212,9 +183,9 @@ void pfRead(const char *fileName, const char *outputFileName){
   hcorr_px_py.Write();
   hcorr_rap_pt.Write();
   hcorr_phi_pt.Write();
-  hcors_px_py.Write();
-  hcors_rap_pt.Write();
-  hcors_phi_pt.Write();
+  hcors_px_py->Write();
+  hcors_rap_pt->Write();
+  hcors_phi_pt->Write();
 
   fileOut1->Close();
 }
