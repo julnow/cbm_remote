@@ -37,32 +37,32 @@ void pfRead(const char *fileName, const char *outputFileName){
   const int simrp = config->GetBranchConfig("Simulated").GetFieldId("p");
 
   //Candidates
-  TH1F hcanpx("hcanpx", "candidate px;px [GeV/c];dN/dpx", 100, -3, 3);
-  TH1F hcanpy("hcanpy", "candidate py;py [GeV/c];dN/dpy", 100, -3, 3);
-  TH1F hcanpz("hcanpz", "candidate pz;pz [GeV/c];dN/dpz", 100, 0, 14);
-  TH1F hcanpt("hcanpt", "candidate pt;pt [GeV/c];dN/dpt", 100, -1, 3);
-  TH1F hcanp("hcanp", "candidate p;p [GeV/c];dN/dp", 100, 0, 14);
-  TH1F hcanphi("hcanphi", "candidate #phi;#phi [rad];dN/d#phi", 100, -3.14, 3.14);
-  //difference
-  TH1F hdifpx("hdifpx", "difference px;px [GeV/c];dN/dpx", 100, -.4, .4);
-  TH1F hdifpy("hdifpy", "difference py;py [GeV/c];dN/dpy", 100, -.4, .4);
-  TH1F hdifpz("hdifpz", "difference pz;pz [GeV/c];dN/dpz", 100, -.8, .8);
-  TH1F hdifpt("hdifpt", "difference pt;pt [GeV/c];dN/dpt", 100, -.4, .4);
-  TH1F hdifp("hdifp", "difference p;p [GeV/c];dN/dp", 100, -.8, .8);
+  TH1F hcanpx("hcanpx", "#Lambda_{can} px;px [GeV/c];dN/dpx", 100, -3, 3);
+  TH1F hcanpy("hcanpy", "#Lambda_{can} py;py [GeV/c];dN/dpy", 100, -3, 3);
+  TH1F hcanpz("hcanpz", "#Lambda_{can} pz;pz [GeV/c];dN/dpz", 100, 0, 14);
+  TH1F hcanpt("hcanpt", "#Lambda_{can} pt;pt [GeV/c];dN/dpt", 100, -1, 3);
+  TH1F hcanp("hcanp", "#Lambda_{can} p;p [GeV/c];dN/dp", 100, 0, 14);
+  TH1F hcanphi("hcanphi", "#Lambda_{can} #phi;#phi [rad];dN/d#phi", 100, -3.14, 3.14);
+  //#Lambda_{can} - #Lambda_{sim}
+  TH1F hdifpx("hdifpx", "#Lambda_{can} - #Lambda_{sim} px;px [GeV/c];dN/dpx", 100, -.4, .4);
+  TH1F hdifpy("hdifpy", "#Lambda_{can} - #Lambda_{sim} py;py [GeV/c];dN/dpy", 100, -.4, .4);
+  TH1F hdifpz("hdifpz", "#Lambda_{can} - #Lambda_{sim} pz;pz [GeV/c];dN/dpz", 100, -.8, .8);
+  TH1F hdifpt("hdifpt", "#Lambda_{can} - #Lambda_{sim} pt;pt [GeV/c];dN/dpt", 100, -.4, .4);
+  TH1F hdifp("hdifp", "#Lambda_{can} - #Lambda_{sim} p;p [GeV/c];dN/dp", 100, -.8, .8);
   //correlations
-  TH2F hcorpx("hcorpx", "correlations px; candidate; simulated", 100, -3, 3,  100, -3, 3);
-  TH2F hcorpy("hcorpy", "correlations py; candidate; simulated", 100, -3, 3,  100, -3, 3);
-  TH2F hcorpz("hcorpz", "correlations pz; candidate; simulated", 100, 0, 14,  100, 0, 14);
-  TH2F hcorr_px_py("hcorr_px_py", "correlations rec px py; px; py", 100, -3, 3,  100, -3, 3);
-  TH2F hcorpt("hcorpt", "correlations pt; candidate; simulated", 100, -1, 3,  100, -1, 3);
-  TH2F hcorp("hcorp", "correlations p; candidate; simulated", 100, 0, 14,  100, 0, 14);
-  TH2F hcorr_rap_pt("hcorr_rap_pt", "correlation rec rapidity pt; rapidity; pT", 100, -1, 4,  100, -1, 4);
-  TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation rec #phi pt; #phi; pT", 100, -5, 5,  100, -0.01, 5);
+  TH2F hcorpx("hcorpx", "correlations px; #Lambda_{can}; #Lambda_{sim}", 100, -3, 3,  100, -3, 3);
+  TH2F hcorpy("hcorpy", "correlations py; #Lambda_{can}; #Lambda_{sim}", 100, -3, 3,  100, -3, 3);
+  TH2F hcorpz("hcorpz", "correlations pz; #Lambda_{can}; #Lambda_{sim}", 100, 0, 14,  100, 0, 14);
+  TH2F hcorr_px_py("hcorr_px_py", "correlations #Lambda_{can} px py; px; py", 100, -3, 3,  100, -3, 3);
+  TH2F hcorpt("hcorpt", "correlations pt; #Lambda_{can}; #Lambda_{sim}", 100, -1, 3,  100, -1, 3);
+  TH2F hcorp("hcorp", "correlations p; #Lambda_{can}; #Lambda_{sim}", 100, 0, 14,  100, 0, 14);
+  TH2F hcorr_rap_pt("hcorr_rap_pt", "correlation #Lambda_{can} rapidity pT; rapidity; pT", 100, -1, 4,  100, -1, 4);
+  TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation #Lambda_{can} #phi pT; #phi; pT", 100, -5, 5,  100, -0.01, 5);
   //chi2
-  TH1F hchi2_geo("chi2_geo", "chi2_geo", 100, -1, 6);
-  TH1F hchi2_prim_first("chi2_prim_first", "chi2_prim_first", 200, -1, 1000);
-  TH1F hchi2_prim_second("chi2_prim_second", "chi2_prim_second", 200, -1, 1000);
-  TH1F hchi2_topo("chi2_topo", "chi2_topo", 100, -1, 10);
+  TH1F hchi2_geo("chi2_geo", "chi2_geo; ; #", 100, -1, 6);
+  TH1F hchi2_prim_first("chi2_prim_first; ; #", "chi2_prim_first", 200, -1, 1000);
+  TH1F hchi2_prim_second("chi2_prim_second; ; #", "chi2_prim_second", 200, -1, 1000);
+  TH1F hchi2_topo("chi2_topo", "chi2_topo; ; #", 100, -1, 10);
 
   //reading of data from simulated histogramsfile
   TFile simFile("simulatedHistograms.root");
@@ -160,7 +160,7 @@ void pfRead(const char *fileName, const char *outputFileName){
   hcord_rap_pt->SetNameTitle("hcord_rap_pt", "division correlation rapidity pt; rapidity; pT");
   hcord_phi_pt = (TH2F*) hcorr_phi_pt.Clone();
   hcord_phi_pt->Divide(hcors_phi_pt);
-  hcord_phi_pt->SetNameTitle("hcord_rphi_pt", "division correlation #phi pt; #phi; pT");
+  hcord_phi_pt->SetNameTitle("hcord_rphi_pt", "division correlation #phi pT; #phi; pT");
   hcord_px_py = (TH2F*) hcorr_px_py.Clone();
   hcord_px_py->Divide(hcors_px_py);
   hcord_px_py->SetNameTitle("hcord_px_py", "division correlations px py; px; py");

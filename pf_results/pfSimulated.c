@@ -17,15 +17,15 @@ const int simsphi = treeInSIM->GetConfiguration()->GetBranchConfig("SimParticles
 const int simspid = treeInSIM->GetConfiguration()->GetBranchConfig("SimParticles").GetFieldId("pid");
 
 //momentum
-TH1F hsimspx("hsimspx", "simulated px;px [GeV/c];dN/dpx", 100, -3, 3);
-TH1F hsimspy("hsimspy", "simulated py;py [GeV/c];dN/dpy", 100, -3, 3);
-TH1F hsimspz("hsimspz", "simulated pz;pz [GeV/c];dN/dpz", 100, 0, 14);
-TH1F hsimspt("hsimspt", "simulated pt;pt [GeV/c];dN/dpt", 100, -1, 3);
-TH1F hsimsp("hsimsp", "simulated p;p [GeV/c];dN/dp", 100, 0, 14);
+TH1F hsimspx("hsimspx", "#Lambda_{sim} px;px [GeV/c];dN/dpx", 100, -3, 3);
+TH1F hsimspy("hsimspy", "#Lambda_{sim} py;py [GeV/c];dN/dpy", 100, -3, 3);
+TH1F hsimspz("hsimspz", "#Lambda_{sim} pz;pz [GeV/c];dN/dpz", 100, 0, 14);
+TH1F hsimspt("hsimspt", "#Lambda_{sim} pt;pt [GeV/c];dN/dpt", 100, -1, 3);
+TH1F hsimsp("hsimsp", "#Lambda_{sim} p;p [GeV/c];dN/dp", 100, 0, 14);
 //correlations for sim
-TH2F hcors_rap_pt("hcors_rap_pt", "correlation sim rapidity pt; rapidity; pT", 100, -1, 4,  100, -1, 4);
-TH2F hcors_phi_pt("hcors_phi_pt", "correlation sim #phi pt; #phi; pT", 100, -5, 5,  100, -0.01, 5);
-TH2F hcors_px_py("hcors_px_py", "correlations sim px py; px; py", 100, -3, 3,  100, -3, 3);
+TH2F hcors_rap_pt("hcors_rap_pt", "correlation #Lambda_{sim} rapidity pt; rapidity; pT", 100, -1, 4,  100, -1, 4);
+TH2F hcors_phi_pt("hcors_phi_pt", "correlation #Lambda_{sim} #phi pt; #phi; pT", 100, -5, 5,  100, -0.01, 5);
+TH2F hcors_px_py("hcors_px_py", "correlations #Lambda_{sim} px py; px; py", 100, -3, 3,  100, -3, 3);
 
 //reading of data
 
