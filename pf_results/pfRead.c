@@ -57,7 +57,7 @@ void pfRead(const char *fileName, const char *outputFileName){
   TH2F hcorpt("hcorpt", "correlations pt; candidate; simulated", 100, -1, 3,  100, -1, 3);
   TH2F hcorp("hcorp", "correlations p; candidate; simulated", 100, 0, 14,  100, 0, 14);
   TH2F hcorr_rap_pt("hcorr_rap_pt", "correlation rec rapidity pt; rapidity; pT", 100, -1, 4,  100, -1, 4);
-  TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation rec #phi pt; #phi; pT", 100, -5, 5,  100, -5, 5);
+  TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation rec #phi pt; #phi; pT", 100, -5, 5,  100, -0.01, 5);
   //chi2
   TH1F hchi2_geo("chi2_geo", "chi2_geo", 100, -1, 6);
   TH1F hchi2_prim_first("chi2_prim_first", "chi2_prim_first", 200, -1, 1000);
