@@ -60,12 +60,12 @@ void pfRead(const char *fileName, const char *outputFileName){
   TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation rec #phi pt; #phi; pT", 100, -5, 5,  100, -5, 5);
   //chi2
   TH1F hchi2_geo("chi2_geo", "chi2_geo", 100, -1, 6);
-  TH1F hchi2_prim_first("chi2_prim_first", "chi2_prim_first", 100, -1, 300);
-  TH1F hchi2_prim_second("chi2_prim_second", "chi2_prim_second", 100, -1, 300);
+  TH1F hchi2_prim_first("chi2_prim_first", "chi2_prim_first", 200, -1, 1000);
+  TH1F hchi2_prim_second("chi2_prim_second", "chi2_prim_second", 200, -1, 1000);
   TH1F hchi2_topo("chi2_topo", "chi2_topo", 100, -1, 10);
 
   //reading of data from simulated histogramsfile
-  TFile simFile("simulatedHistograms.root"); 
+  TFile simFile("simulatedHistograms.root");
   TH1F* hsimspx;
   TH1F* hsimspy;
   TH1F* hsimspz;
@@ -76,13 +76,21 @@ void pfRead(const char *fileName, const char *outputFileName){
   TH2F* hcors_phi_pt;
   TH2F* hcors_px_py;
   simFile.GetObject("hsimspx",hsimspx);
+  hsimspx->SetDirectory(0);
   simFile.GetObject("hsimspy",hsimspy);
+  hsimspy->SetDirectory(0);
   simFile.GetObject("hsimspz",hsimspz);
+  hsimspz->SetDirectory(0);
   simFile.GetObject("hsimspt",hsimspt);
+  hsimspt->SetDirectory(0);
   simFile.GetObject("hsimsp",hsimsp);
+  hsimsp->SetDirectory(0);
   simFile.GetObject("hcors_rap_pt",hcors_rap_pt);
+  hcors_rap_pt->SetDirectory(0);
   simFile.GetObject("hcors_phi_pt",hcors_phi_pt);
+  hcors_phi_pt->SetDirectory(0);
   simFile.GetObject("hcors_px_py",hcors_px_py);
+  hcors_px_py->SetDirectory(0);
   simFile.Close();
 
     //reading data from pfsimple file
@@ -144,15 +152,18 @@ void pfRead(const char *fileName, const char *outputFileName){
     }
   }
   //division of histograms
-//  TH2F* hcord_rap_pt = new TH2F("hcord_rap_pt", "division correlation rapidity pt; rapidity; pT", 100, -1, 4,  100, -1, 4);
-//  TH2F* hcord_phi_pt = new TH2F("hcord_rap_pt", "division correlation #phi pt; #phi; pT", 100, -5, 5,  100, -5, 5);
-//  TH2F* hcord_px_py = new TH2F("hcord_px_py", "division correlations px py; px; py", 100, -3, 3,  100, -3, 3);
-//  hcord_rap_pt = (TH2F*) hcorr_rap_pt.Clone();
-//  hcord_rap_pt->Divide(hcors_rap_pt);
-//  hcord_phi_pt = (TH2F*) hcorr_phi_pt.Clone();
-//  hcord_phi_pt->Divide(hcors_phi_pt);
-//  hcord_px_py = (TH2F*) hcorr_px_py.Clone();
-//  hcord_px_py->Divide(hcors_px_py);
+  TH2F* hcord_rap_pt;
+  TH2F* hcord_phi_pt;
+  TH2F* hcord_px_py;
+  hcord_rap_pt = (TH2F*) hcorr_rap_pt.Clone();
+  hcord_rap_pt->Divide(hcors_rap_pt);
+  hcord_rap_pt->SetNameTitle("hcord_rap_pt", "division correlation rapidity pt; rapidity; pT");
+  hcord_phi_pt = (TH2F*) hcorr_phi_pt.Clone();
+  hcord_phi_pt->Divide(hcors_phi_pt);
+  hcord_phi_pt->SetNameTitle("hcord_rphi_pt", "division correlation #phi pt; #phi; pT");
+  hcord_px_py = (TH2F*) hcorr_px_py.Clone();
+  hcord_px_py->Divide(hcors_px_py);
+  hcord_px_py->SetNameTitle("hcord_px_py", "division correlations px py; px; py");
 
   TFile* fileOut1 = TFile::Open(outputFileName, "recreate");
 
@@ -186,6 +197,9 @@ void pfRead(const char *fileName, const char *outputFileName){
   hcors_px_py->Write();
   hcors_rap_pt->Write();
   hcors_phi_pt->Write();
+  hcord_px_py->Write();
+  hcord_rap_pt->Write();
+  hcord_phi_pt->Write();
 
   fileOut1->Close();
 }
