@@ -1,3 +1,32 @@
+TH2F *relativeError(TH2F *hrec, TH2F *hsim){
+
+  TH2F *hrel = (TH2F*) hrec->Clone();
+
+  hrec->Sumw2();
+  hsim->Sumw2();
+
+  float epsilon = 0.f;
+  float delta, delta1, delta2 = 0.f; //delta epsilon
+  float relativeErr = 0.f;
+   for (int i=1; i<=hrec->GetNbinsX(); i++) {
+     for (int j=1; j<=hrec->GetNbinsY(); j++) {
+       epsilon = hrec->GetBinContent(i,j) / hsim->GetBinContent(i,j);
+       //error in 3 steps:
+       delta1 = hrec->GetBinError(i,j)*hrec->GetBinError(i,j) * abs(hrec->GetBinContent(i,j));
+       delta2 = hsim->GetBinError(i,j)*hsim->GetBinError(i,j) * abs(hsim->GetBinContent(i,j));
+       delta = sqrt(delta1 + delta2);
+       if (delta != 0 && epsilon!= 0){
+         relativeErr = delta / epsilon;
+         hrel->SetBinContent(i, j, relativeErr);
+       }else{
+          hrel->SetBinContent(i, j, 0);
+       }
+    }
+  }
+  return hrel;
+}
+
+
 void pfRead(const char *fileName, const char *outputFileName){
 
   TFile* fileInPF = TFile::Open(fileName, "read");
@@ -59,10 +88,10 @@ void pfRead(const char *fileName, const char *outputFileName){
   TH2F hcorr_rap_pt("hcorr_rap_pt", "correlation #Lambda_{can} rapidity pT; rapidity; pT", 100, -1, 4,  100, -1, 4);
   TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation #Lambda_{can} #phi pT; #phi; pT", 100, -5, 5,  100, -0.01, 5);
   //chi2
-  TH1F hchi2_geo("chi2_geo", "chi2_geo; ; #", 100, -1, 6);
-  TH1F hchi2_prim_first("chi2_prim_first; ; #", "chi2_prim_first", 200, -1, 1000);
-  TH1F hchi2_prim_second("chi2_prim_second; ; #", "chi2_prim_second", 200, -1, 1000);
-  TH1F hchi2_topo("chi2_topo", "chi2_topo; ; #", 100, -1, 10);
+  TH1F hchi2_geo("chi2_geo", "chi2_geo; chi2_geo; #", 100, -1, 6);
+  TH1F hchi2_prim_first("chi2_prim_first", "chi2_prim_first; chi2_prim_first; #", 200, -1, 1000);
+  TH1F hchi2_prim_second("chi2_prim_second", "chi2_prim_second; chi2_prim_second; #", 200, -1, 1000);
+  TH1F hchi2_topo("chi2_topo", "chi2_topo; chi2_topo; #", 100, -1, 10);
 
   //reading of data from simulated histogramsfile
   TFile simFile("simulatedHistograms.root");
@@ -153,17 +182,23 @@ void pfRead(const char *fileName, const char *outputFileName){
   }
   //division of histograms
   TH2F* hcord_rap_pt;
-  TH2F* hcord_phi_pt;
-  TH2F* hcord_px_py;
   hcord_rap_pt = (TH2F*) hcorr_rap_pt.Clone();
   hcord_rap_pt->Divide(hcors_rap_pt);
   hcord_rap_pt->SetNameTitle("hcord_rap_pt", "division correlation rapidity pt; rapidity; pT");
+  TH2F* hcordr_rap_pt = relativeError(&hcorr_rap_pt, hcors_rap_pt); //relative error
+  hcordr_rap_pt->SetNameTitle("hcordr_rap_pt", "#frac{#Delta #varepsilon}{#varepsilon} correlation rapidity pT; rapidity; pT");
+  TH2F* hcord_phi_pt;
   hcord_phi_pt = (TH2F*) hcorr_phi_pt.Clone();
   hcord_phi_pt->Divide(hcors_phi_pt);
   hcord_phi_pt->SetNameTitle("hcord_rphi_pt", "division correlation #phi pT; #phi; pT");
+  TH2F* hcordr_phi_pt = relativeError(&hcorr_phi_pt, hcors_phi_pt); //relative error
+  hcordr_phi_pt->SetNameTitle("hcordr_phi_pt", "#frac{#Delta #varepsilon}{#varepsilon} correlation #phi pT; #phi; pT");
+  TH2F* hcord_px_py;
   hcord_px_py = (TH2F*) hcorr_px_py.Clone();
   hcord_px_py->Divide(hcors_px_py);
   hcord_px_py->SetNameTitle("hcord_px_py", "division correlations px py; px; py");
+  TH2F* hcordr_px_py = relativeError(&hcorr_px_py, hcors_px_py); //relative error
+  hcordr_px_py->SetNameTitle("hcordr_px_py", "#frac{#Delta #varepsilon}{#varepsilon} correlation px py; px; py");
 
   TFile* fileOut1 = TFile::Open(outputFileName, "recreate");
 
@@ -197,9 +232,12 @@ void pfRead(const char *fileName, const char *outputFileName){
   hcors_px_py->Write();
   hcors_rap_pt->Write();
   hcors_phi_pt->Write();
-  hcord_px_py->Write();
   hcord_rap_pt->Write();
+  hcordr_rap_pt->Write();
+  hcord_px_py->Write();
+  hcordr_px_py->Write();
   hcord_phi_pt->Write();
+  hcordr_phi_pt->Write();
 
   fileOut1->Close();
 }
