@@ -1,21 +1,23 @@
-TH2F *relativeError(TH2F *hrec, TH2F *hsim){
+TH2F *relativeError(TH2F *hrec, TH2F *hsim){ //finds relative error of division of 2 histograms
 
   TH2F *hrel = (TH2F*) hrec->Clone();
 
-  hrec->Sumw2();
-  hsim->Sumw2();
-
   float epsilon = 0.f;
-  float delta, delta1, delta2 = 0.f; //delta epsilon
+  float delta, delta1, delta2 = 0.f;
   float relativeErr = 0.f;
+  float simContent, recContent;
+  
    for (int i=1; i<=hrec->GetNbinsX(); i++) {
      for (int j=1; j<=hrec->GetNbinsY(); j++) {
-       epsilon = hrec->GetBinContent(i,j) / hsim->GetBinContent(i,j);
-       //error in 3 steps:
-       delta1 = hrec->GetBinError(i,j)*hrec->GetBinError(i,j) * abs(hrec->GetBinContent(i,j));
-       delta2 = hsim->GetBinError(i,j)*hsim->GetBinError(i,j) * abs(hsim->GetBinContent(i,j));
-       delta = sqrt(delta1 + delta2);
-       if (delta != 0 && epsilon!= 0){
+       recContent = hrec->GetBinContent(i,j);
+       if (recContent != 0){
+         simContent = hsim->GetBinContent(i,j);
+         epsilon = recContent / simContent;
+         //delta in 3 steps:
+         delta1 = 1 / recContent;
+         delta2 = 1 / simContent;
+         delta = sqrt(delta1 + delta2);
+         //relative error:
          relativeErr = delta / epsilon;
          hrel->SetBinContent(i, j, relativeErr);
        }else{
