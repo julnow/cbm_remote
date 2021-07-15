@@ -8,8 +8,8 @@ TH2F *relativeError(TH2F *hrec, TH2F *hsim){ //finds relative error of division 
    for (int i=1; i<=hrec->GetNbinsX(); i++) {
      for (int j=1; j<=hrec->GetNbinsY(); j++) {
        recContent = hrec->GetBinContent(i,j);
-       if (recContent != 0){
-         simContent = hsim->GetBinContent(i,j);
+       simContent = hsim->GetBinContent(i,j);
+       if (recContent != 0 && simContent != 0){
          //delta in 3 steps:
          delta1 = 1 / recContent;
          delta2 = 1 / simContent;
@@ -231,11 +231,11 @@ void pfRead(const char *fileName, const char *outputFileName){
   hcors_rap_pt->Write();
   hcors_phi_pt->Write();
   hcord_rap_pt->Write();
- // hcordr_rap_pt->Write();
+  hcordr_rap_pt->Write();
   hcord_px_py->Write();
- // hcordr_px_py->Write();
+  hcordr_px_py->Write();
   hcord_phi_pt->Write();
- // hcordr_phi_pt->Write();
+  hcordr_phi_pt->Write();
 
   fileOut1->Close();
 }
