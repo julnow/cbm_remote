@@ -5,12 +5,12 @@ void momentum(){
   //TTree* treeIn = fileIn->Get<TTree>("rTree");
   AnalysisTree::Chain* treeIn = new AnalysisTree::Chain(std::vector<std::string>({"filelist.txt"}), std::vector<std::string>({"rTree"}));
 
-
   auto* eve_header = new AnalysisTree::EventHeader();
   auto* rec_header = new AnalysisTree::EventHeader();
   auto* sim_tracks = new AnalysisTree::Particles();
   auto* vtx_tracks = new AnalysisTree::TrackDetector();
   auto* sim_vtx_matching = new AnalysisTree::Matching();
+  auto* tof_hits = new AnalysisTree::HitDetector();
 
   //AnalysisTree::Configuration* config = fileIn->Get<AnalysisTree::Configuration>("Configuration");
   //treeIn->GetConfiguration() instead of congif
@@ -26,7 +26,8 @@ void momentum(){
   const int rpT = treeIn->GetConfiguration()->GetBranchConfig("VtxTracks").GetFieldId("pT");
   const int reta = treeIn->GetConfiguration()->GetBranchConfig("VtxTracks").GetFieldId("eta");
   const int rphi = treeIn->GetConfiguration()->GetBranchConfig("VtxTracks").GetFieldId("phi");
-
+  const int mass2 = treeIn->GetConfiguration()->GetBranchConfig("TofHits").GetFieldId("mass2"); //tofhits
+  const int qp_tof = treeIn->GetConfiguration()->GetBranchConfig("TofHits").GetFieldId("qp_tof");
 
 
   treeIn->SetBranchAddress("SimParticles", &sim_tracks);
@@ -47,7 +48,7 @@ void momentum(){
   TH1F hsp("hsp", "simulated p;p [GeV/c];dN/dp", 1000, -2, 6);
   TH1F hspt("hspt", "simulated pT;pT [GeV/c];dN/dpT", 1000, 0, 6);
   TH1F hseta("hseta", "simulated #eta; #eta; dN/d#eta", 1000, 0, 6);
-  TH1F hsrap("hsrap", "simulated rapidity", 1000, -3, 6);
+  TH1F hsrap("hsrap", "simulated rapidity; rapidity; counts", 1000, -3, 6);
   TH1F hsx("hsx", "simulated x; x; dN/dx", 1000, -3, 3);
   TH1F hsy("hsy", "simulated y; y; dN/dy", 1000, -3, 3);
   TH1F hsz("hsz", "simulated z; z; dN/dz", 2100, -100, 2000);
@@ -58,7 +59,6 @@ void momentum(){
   TH1F hrp("hrp", "reconstructed p;p [GeV/c];dN/dp", 1000, 0, 6);
   TH1F hrpt("hrpt", "reconstructed pT;pT [GeV/c];dN/dpT", 1000, 0, 6);
   TH1F hreta("hreta", "reconstructed #eta; #eta; dN/d#eta", 1000, 0, 6);
-//  TH1F hrrap("hrrap", "rec rapidity", 1000, -3, 3);
   TH2F hcpx("hcpx", "correlation px; reconstructed px; simulated px", 1000, -3, 3, 1000, -3, 3); //correlationrelation
   TH2F hcpy("hcpy", "correlation py; reconstructed py; simulated py", 1000, -3, 3, 1000, -3, 3);
   TH2F hcpz("hcpz", "correlation pz; reconstructed pz; simulated pz", 1000, 0, 6, 1000, 0, 6);
@@ -67,9 +67,17 @@ void momentum(){
   TH2F hcpt("hcpt", "correlation pT; reconstructed pT; simulated pT", 1000, 0, 6, 1000, 0, 6);
   TH2F hceta("hceta", "correlation #eta; reconstructed #eta; simulated #eta", 1000, 0, 6, 1000, 0, 6);
   TH2F hcrpxpy("hcpxpy", "correlation reconstructed px py; px; py", 1000, -3, 3, 1000, -3, 3);
+  TH2F hc_qp_mass2("hc_qp_mass2", "correlation qp_tof mass2; sign(q)*p (GeV/c);mass^2 (GeV)^2", 1000, -16, 16, 100, -5, 10); //tof hits
 
   for(int i=0; i<Nevents; i++){
     treeIn -> GetEntry(i);
+
+    //tof hits
+    for (const auto& tof_hit : *tof_hits){
+      const float tof_mass2 = tof_hit.GetField<float>(mass2);
+      const float tof_qp_tof = tof_hit.GetField<float>(qp_tof);
+      hc_qp_mass2.Fill(tof_qp_tof, tof_mass2);
+    }
     //simulated
     for(const auto& sim_track : *(sim_tracks->GetChannels()) ){
       const float sim_px = sim_track.GetPx();
@@ -133,8 +141,8 @@ void momentum(){
            hceta.Fill(rec_eta, sim_eta);
            hcphi.Fill(rec_phi, sim_phi);
            hcrpxpy.Fill(rec_px, rec_py);
+         }
     }
-  }
 
    hspx.Write();
    hspy.Write();
@@ -179,6 +187,7 @@ void momentum(){
    hcrpxpy.GetXaxis()->SetTitle("reconstructed");
    hcrpxpy.GetYaxis()->SetTitle("simulated");
    hcrpxpy.Write();
+   hc_qp_mass2.Write();
 
   fileOut1->Close();
 }
