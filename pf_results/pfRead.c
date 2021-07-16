@@ -8,8 +8,8 @@ TH2F *relativeError(TH2F *hrec, TH2F *hsim){ //finds relative error of division 
    for (int i=1; i<=hrec->GetNbinsX(); i++) {
      for (int j=1; j<=hrec->GetNbinsY(); j++) {
        recContent = hrec->GetBinContent(i,j);
-       if (recContent != 0){
-         simContent = hsim->GetBinContent(i,j);
+       simContent = hsim->GetBinContent(i,j);
+       if (recContent != 0 && simContent != 0){
          //delta in 3 steps:
          delta1 = 1 / recContent;
          delta2 = 1 / simContent;
@@ -80,11 +80,11 @@ void pfRead(const char *fileName, const char *outputFileName){
   TH2F hcorpx("hcorpx", "correlations px; #Lambda_{can}; #Lambda_{sim}", 100, -3, 3,  100, -3, 3);
   TH2F hcorpy("hcorpy", "correlations py; #Lambda_{can}; #Lambda_{sim}", 100, -3, 3,  100, -3, 3);
   TH2F hcorpz("hcorpz", "correlations pz; #Lambda_{can}; #Lambda_{sim}", 100, 0, 14,  100, 0, 14);
-  TH2F hcorr_px_py("hcorr_px_py", "correlations #Lambda_{can} px py; px; py", 100, -3, 3,  100, -3, 3);
+  TH2F hcorr_px_py("hcorr_px_py", "correlations #Lambda_{can} px py; px [GeV/c]; py [GeV/c]", 100, -3, 3,  100, -3, 3);
   TH2F hcorpt("hcorpt", "correlations pt; #Lambda_{can}; #Lambda_{sim}", 100, -1, 3,  100, -1, 3);
   TH2F hcorp("hcorp", "correlations p; #Lambda_{can}; #Lambda_{sim}", 100, 0, 14,  100, 0, 14);
-  TH2F hcorr_rap_pt("hcorr_rap_pt", "correlation #Lambda_{can} rapidity pT; rapidity; pT", 100, -1, 4,  100, -1, 4);
-  TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation #Lambda_{can} #phi pT; #phi; pT", 100, -5, 5,  100, -0.01, 5);
+  TH2F hcorr_rap_pt("hcorr_rap_pt", "correlation #Lambda_{can} rapidity pT; rapidity; pT [GeV/c]", 100, -1, 4,  100, -1, 4);
+  TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation #Lambda_{can} #phi pT; #phi [#circ]; pT [GeV/c]", 100, -5, 5,  100, -0.01, 5);
   //chi2
   TH1F hchi2_geo("chi2_geo", "chi2_geo; chi2_geo; #", 100, -1, 6);
   TH1F hchi2_prim_first("chi2_prim_first", "chi2_prim_first; chi2_prim_first; #", 200, -1, 1000);
