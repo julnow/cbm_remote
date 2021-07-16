@@ -3,7 +3,7 @@ void momentum(){
   //TString fileName = "1.analysistree.root";
   //TFile* fileIn = TFile::Open(fileName, "read");
   //TTree* treeIn = fileIn->Get<TTree>("rTree");
-  AnalysisTree::Chain* treeIn = new AnalysisTree::Chain(std::vector<std::string>({"analysistree_list.txt"}), std::vector<std::string>({"rTree"}));
+  AnalysisTree::Chain* treeIn = new AnalysisTree::Chain(std::vector<std::string>({"filelist.txt"}), std::vector<std::string>({"rTree"}));
 
 
   auto* eve_header = new AnalysisTree::EventHeader();
@@ -40,38 +40,36 @@ void momentum(){
 
   //zadania
   TFile* fileOut1 = TFile::Open("momentum.root", "recreate");
-  TH1F hspx("hspx", "sim px;px [GeV/c];dN/dpx", 1000, -3, 3); //simulated
-  TH1F hspy("hspy", "sim py;py [GeV/c];dN/dpy", 1000, -3, 3);
-  TH1F hspz("hspz", "sim pz;pz [GeV/c];dN/dpz", 1000, 0, 6);
-  TH1F hsphi("hsphi", "sim phi", 1000, 0, 6);
-  TH1F hsp("hsp", "sim p", 1000, 0, 6);
-  TH1F hspt("hspt", "sim pt;pt [GeV/c];dN/dpt", 1000, 0, 6);
-  TH1F hseta("hseta", "sim eta", 1000, 0, 6);
-  TH1F hsrap("hsrap", "sim rapidity", 1000, -3, 6);
-  TH1F hsx("hsx", "sim x", 1000, -3, 3);
-  TH1F hsy("hsy", "sim y", 1000, -3, 3);
-  TH1F hsz("hsz", "sim z", 2100, -100, 2000);
-  TH1F hrpx("hrpx", "rec px;px [GeV/c];dN/dpx", 1000, -3, 3); //reconstructed
-  TH1F hrpy("hrpy", "rec py;py [GeV/c];dN/dpy", 1000, -3, 3);
-  TH1F hrpz("hrpz", "rec pz;pz [GeV/c];dN/dpz", 1000, 0, 6);
-  TH1F hrphi("hrphi", "rec phi", 1000, 0, 6);
-  TH1F hrp("hrp", "rec p", 1000, 0, 6);
-  TH1F hrpt("hrpt", "rec pz", 1000, 0, 6);
-  TH1F hreta("hreta", "rec eta", 1000, 0, 6);
+  TH1F hspx("hspx", "simulated px;px [GeV/c];dN/dpx", 1000, -3, 1); //simulatedulated
+  TH1F hspy("hspy", "simulated py;py [GeV/c];dN/dpy", 1000, -3, 3);
+  TH1F hspz("hspz", "simulated pz;pz [GeV/c];dN/dpz", 1000, -2, 6);
+  TH1F hsphi("hsphi", "simulated #phi; #phi [°];dN/d#phi; ", 1000, 0, 6);
+  TH1F hsp("hsp", "simulated p;p [GeV/c];dN/dp", 1000, -2, 6);
+  TH1F hspt("hspt", "simulated pT;pT [GeV/c];dN/dpT", 1000, 0, 6);
+  TH1F hseta("hseta", "simulated #eta; #eta; dN/d#eta", 1000, 0, 6);
+  TH1F hsrap("hsrap", "simulated rapidity", 1000, -3, 6);
+  TH1F hsx("hsx", "simulated x; x; dN/dx", 1000, -3, 3);
+  TH1F hsy("hsy", "simulated y; y; dN/dy", 1000, -3, 3);
+  TH1F hsz("hsz", "simulated z; z; dN/dz", 2100, -100, 2000);
+  TH1F hrpx("hrpx", "reconstructed px;px [GeV/c];dN/dpx", 1000, -3, 3); //reconstructedonstructed
+  TH1F hrpy("hrpy", "reconstructed py;py [GeV/c];dN/dpy", 1000, -3, 3);
+  TH1F hrpz("hrpz", "reconstructed pz;pz [GeV/c];dN/dpz", 1000, -2, 6);
+  TH1F hrphi("hrphi", "reconstructed #phi; #phi [°];dN/d#phi", 1000, 0, 6);
+  TH1F hrp("hrp", "reconstructed p;p [GeV/c];dN/dp", 1000, 0, 6);
+  TH1F hrpt("hrpt", "reconstructed pT;pT [GeV/c];dN/dpT", 1000, 0, 6);
+  TH1F hreta("hreta", "reconstructed #eta; #eta; dN/d#eta", 1000, 0, 6);
 //  TH1F hrrap("hrrap", "rec rapidity", 1000, -3, 3);
-  TH2F hcpx("hcpx", "cor px", 1000, -3, 3, 1000, -3, 3); //correlation
-  TH2F hcpy("hcpy", "cor py", 1000, -3, 3, 1000, -3, 3);
-  TH2F hcpz("hcpz", "cor pz", 1000, 0, 6, 1000, 0, 6);
-  TH2F hcphi("hcphi", "cor phi", 1000, 0, 6, 1000, 0, 6);
-  TH2F hcp("hcp", "cor p", 1000, 0, 6, 1000, 0, 6);
-  TH2F hcpt("hcpt", "cor pt", 1000, 0, 6, 1000, 0, 6);
-  TH2F hceta("hceta", "cor peta", 1000, 0, 6, 1000, 0, 6);
-  TH2F hcrpxpy("hcpxpy", "cor rec pxpy", 1000, -3, 3, 1000, -3, 3);
+  TH2F hcpx("hcpx", "correlation px; reconstructed px; simulated px", 1000, -3, 3, 1000, -3, 3); //correlationrelation
+  TH2F hcpy("hcpy", "correlation py; reconstructed py; simulated py", 1000, -3, 3, 1000, -3, 3);
+  TH2F hcpz("hcpz", "correlation pz; reconstructed pz; simulated pz", 1000, 0, 6, 1000, 0, 6);
+  TH2F hcphi("hcphi", "correlation #phi; reconstructed #phi; simulated #phi", 1000, 0, 6, 1000, 0, 6);
+  TH2F hcp("hcp", "correlation p; reconstructed p; simulated p", 1000, 0, 6, 1000, 0, 6);
+  TH2F hcpt("hcpt", "correlation pT; reconstructed pT; simulated pT", 1000, 0, 6, 1000, 0, 6);
+  TH2F hceta("hceta", "correlation #eta; reconstructed #eta; simulated #eta", 1000, 0, 6, 1000, 0, 6);
+  TH2F hcrpxpy("hcpxpy", "correlation reconstructed px py; px; py", 1000, -3, 3, 1000, -3, 3);
 
   for(int i=0; i<Nevents; i++){
     treeIn -> GetEntry(i);
-
-
     //simulated
     for(const auto& sim_track : *(sim_tracks->GetChannels()) ){
       const float sim_px = sim_track.GetPx();
