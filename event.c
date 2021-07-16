@@ -36,24 +36,24 @@ void event(){
 
   //zadania
   TFile* fileOut1 = TFile::Open("event.root", "recreate");
-  TH1F hsx("hsx", "simulated x; x [cm]; dN/dx", 1000, -3, 3); //simulatedulated
-  TH1F hsy("hsy", "simulated y; y [cm]; dN/dy", 1000, -3, 3);
-  TH1F hsz("hsz", "simulated z; z [cm]; dN/dz", 1000, -3, 3);
-  TH1F hspsi("hspsi", "simulated #psi; #psi [rad]; dN/dx", 100, -6.5, 6.5);
-  TH1F hrx("hrx", "reconstructed x; x [cm]; dN/dx", 1000, -3, 3); //reconstructedonstructed
-  TH1F hry("hry", "reconstructed y; x [cm]; dN/dy", 1000, -3, 3);
-  TH1F hrz("hrz", "reconstructed z; x [cm]; dN/dz", 1000, -3, 3);
-  TH1F hrchi2("hrchi2", "reconstructed #{chi^2}/NDF; #{chi^2/NDF}; counts", 100, 0, 3);
-  TH1F hEpsd("hEpsd", "reconstructed Epsd; Epsd [GeV]; dN/dEpsd", 100, -1, 26);
-  TH1F hm("hm", "reconstructed multiplicity; multiplicty [STS]; counts", 100, 0, 16);
+  TH1F hsx("hsx", "simulated x; x [cm]; dN/dx", 100, -.6, .6); //simulatedulated
+  TH1F hsy("hsy", "simulated y; y [cm]; dN/dy", 100, -.6, .6);
+  TH1F hsz("hsz", "simulated z; z [cm]; dN/dz", 1000, -.08, .08);
+  TH1F hspsi("hspsi", "simulated #psi; #psi [rad]; dN/dx", 200, -.1, 6.5);
+  TH1F hrx("hrx", "reconstructed x; x [cm]; dN/dx", 100, -.6, .6); //reconstructedonstructed
+  TH1F hry("hry", "reconstructed y; x [cm]; dN/dy", 100, -.6, .6);
+  TH1F hrz("hrz", "reconstructed z; x [cm]; dN/dz", 100, -.08, .08);
+  TH1F hrchi2("hrchi2", "reconstructed #chi^{2}/NDF; #chi^{2}/NDF; counts", 100, 0, 3);
+  TH1F hEpsd("hEpsd", "reconstructed Epsd; Epsd [GeV]; dN/dEpsd", 100, -1, 60);
+  TH1F hm("hm", "reconstructed multiplicity; multiplicty [STS]; counts", 100, 0, 3);
   TH1F hb("hb", "reconstructed impact parameter; b [fm]; dN/db", 100, 0, 16);
-  TH2F hcx("hcx", "correlation px; reconstructed x; simulated x", 1000, -.5, .5, 1000, -.5, .5); //correlation
-  TH2F hcy("hcy", "correlation py; reconstructed y; simulated y", 1000, -.5, .5, 1000, -.5, .5);
-  TH2F hcz("hcz", "correlation pz; reconstructed z; simulated z", 1000, -.5, .5, 1000, -.5, .5);
-  TH2F hcbm("hcbm", "correlation (b, multiplicty)# b [fm]; multiplicty [STS]", 100, 0, 16, 100, 0, 16);
-  TH1F hdx("hdx", "difference #{x_{rec} - #{x_{sim};#Delta x [cm]; dN/d#Delta x", 1000, -.2, .2); //simulated
-  TH1F hdy("hdy", "diiference #{y_{rec} - #{y_{sim};#Delta y [cm]; dN/d#Delta y", 1000, -.2, .2);
-  TH1F hdz("hdz", "difference #{z_{rec} - #{z_{sim};#Delta z [cm]; dN/d#Delta z", 10000, -3, 3);
+  TH2F hcx("hcx", "correlation px; reconstructed x; simulated x", 1000, -.6, .6, 1000, -.6, .6); //correlation
+  TH2F hcy("hcy", "correlation py; reconstructed y; simulated y", 1000, -.6, .6, 1000, -.6, .6);
+  TH2F hcz("hcz", "correlation pz; reconstructed z; simulated z", 1000, -.08, .08, 1000, -.08, .08);
+  TH2F hcbm("hcbm", "correlation (b, multiplicty); b [fm]; multiplicty [STS]", 100, 0, 16, 100, 0, 6);
+  TH1F hdx("hdx", "difference x_{rec} - x_{sim};#Delta x [cm]; dN/d#Delta x", 100, -.01, .01); //simulated
+  TH1F hdy("hdy", "diiference y_{rec} - y_{sim};#Delta y [cm]; dN/d#Delta y", 100, -.01, .01);
+  TH1F hdz("hdz", "difference z_{rec} -  z_{sim};#Delta z [cm]; dN/d#Delta z", 1000, -.2, .2);
 
 
   for(int i=0; i<Nevents; i++){

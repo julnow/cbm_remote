@@ -34,6 +34,7 @@ void momentum(){
   treeIn->SetBranchAddress("VtxTracks", &vtx_tracks);
   treeIn->SetBranchAddress("RecEventHeader", &rec_header);
   treeIn->SetBranchAddress(treeIn->GetConfiguration()->GetMatchName("VtxTracks", "SimParticles").c_str(), &sim_vtx_matching);
+  treeIn->SetBranchAddress("TofHits", &tof_hits);
 
   int N = 0;
 
@@ -41,33 +42,33 @@ void momentum(){
 
   //zadania
   TFile* fileOut1 = TFile::Open("momentum.root", "recreate");
-  TH1F hspx("hspx", "simulated px;px [GeV/c];dN/dpx", 1000, -3, 1); //simulatedulated
-  TH1F hspy("hspy", "simulated py;py [GeV/c];dN/dpy", 1000, -3, 3);
-  TH1F hspz("hspz", "simulated pz;pz [GeV/c];dN/dpz", 1000, -2, 6);
-  TH1F hsphi("hsphi", "simulated #phi; #phi [°];dN/d#phi; ", 1000, 0, 6);
-  TH1F hsp("hsp", "simulated p;p [GeV/c];dN/dp", 1000, -2, 6);
-  TH1F hspt("hspt", "simulated pT;pT [GeV/c];dN/dpT", 1000, 0, 6);
-  TH1F hseta("hseta", "simulated #eta; #eta; dN/d#eta", 1000, 0, 6);
+  TH1F hspx("hspx", "simulated px;px [GeV/c];dN/dpx", 1000, -.4, .4); //simulatedulated
+  TH1F hspy("hspy", "simulated py;py [GeV/c];dN/dpy", 1000, -.4, .4);
+  TH1F hspz("hspz", "simulated pz;pz [GeV/c];dN/dpz", 1000, -.2, .4);
+  TH1F hsphi("hsphi", "simulated #phi; #phi [#circ];dN/d#phi; ", 1000, -3.5, 3.5);
+  TH1F hsp("hsp", "simulated p;p [GeV/c];dN/dp", 1000, -.1, .6);
+  TH1F hspt("hspt", "simulated pT;pT [GeV/c];dN/dpT", 1000, -.1, .6);
+  TH1F hseta("hseta", "simulated #eta; #eta; dN/d#eta", 1000, -4, 10);
   TH1F hsrap("hsrap", "simulated rapidity; rapidity; counts", 1000, -3, 6);
-  TH1F hsx("hsx", "simulated x; x; dN/dx", 1000, -3, 3);
-  TH1F hsy("hsy", "simulated y; y; dN/dy", 1000, -3, 3);
-  TH1F hsz("hsz", "simulated z; z; dN/dz", 2100, -100, 2000);
-  TH1F hrpx("hrpx", "reconstructed px;px [GeV/c];dN/dpx", 1000, -3, 3); //reconstructedonstructed
-  TH1F hrpy("hrpy", "reconstructed py;py [GeV/c];dN/dpy", 1000, -3, 3);
-  TH1F hrpz("hrpz", "reconstructed pz;pz [GeV/c];dN/dpz", 1000, -2, 6);
-  TH1F hrphi("hrphi", "reconstructed #phi; #phi [°];dN/d#phi", 1000, 0, 6);
-  TH1F hrp("hrp", "reconstructed p;p [GeV/c];dN/dp", 1000, 0, 6);
-  TH1F hrpt("hrpt", "reconstructed pT;pT [GeV/c];dN/dpT", 1000, 0, 6);
+  TH1F hsx("hsx", "simulated x; x; dN/dx", 100, -3, 3);
+  TH1F hsy("hsy", "simulated y; y; dN/dy", 100, -3, 3);
+  TH1F hsz("hsz", "simulated z; z; dN/dz", 2100, -100, 1500);
+  TH1F hrpx("hrpx", "reconstructed px;px [GeV/c];dN/dpx", 1000, -2, 2); //reconstructedonstructed
+  TH1F hrpy("hrpy", "reconstructed py;py [GeV/c];dN/dpy", 1000, -2, 2);
+  TH1F hrpz("hrpz", "reconstructed pz;pz [GeV/c];dN/dpz", 1000, -.1, 10);
+  TH1F hrphi("hrphi", "reconstructed #phi; #phi [#circ];dN/d#phi", 500, -3.5, 3.5);
+  TH1F hrp("hrp", "reconstructed p;p [GeV/c];dN/dp", 1000, -.1, 10);
+  TH1F hrpt("hrpt", "reconstructed pT;pT [GeV/c];dN/dpT", 1000, -.1, 2.5);
   TH1F hreta("hreta", "reconstructed #eta; #eta; dN/d#eta", 1000, 0, 6);
   TH2F hcpx("hcpx", "correlation px; reconstructed px; simulated px", 1000, -3, 3, 1000, -3, 3); //correlationrelation
   TH2F hcpy("hcpy", "correlation py; reconstructed py; simulated py", 1000, -3, 3, 1000, -3, 3);
-  TH2F hcpz("hcpz", "correlation pz; reconstructed pz; simulated pz", 1000, 0, 6, 1000, 0, 6);
-  TH2F hcphi("hcphi", "correlation #phi; reconstructed #phi; simulated #phi", 1000, 0, 6, 1000, 0, 6);
+  TH2F hcpz("hcpz", "correlation pz; reconstructed pz; simulated pz", 1000, -1, 10, 1000, -1, 10);
+  TH2F hcphi("hcphi", "correlation #phi; reconstructed #phi; simulated #phi", 1000, -3.5, 3.5, 1000, -3.5, 3.5);
   TH2F hcp("hcp", "correlation p; reconstructed p; simulated p", 1000, 0, 6, 1000, 0, 6);
-  TH2F hcpt("hcpt", "correlation pT; reconstructed pT; simulated pT", 1000, 0, 6, 1000, 0, 6);
+  TH2F hcpt("hcpt", "correlation pT; reconstructed pT; simulated pT", 1000, -1, 2.5, 1000, -1, 2.5);
   TH2F hceta("hceta", "correlation #eta; reconstructed #eta; simulated #eta", 1000, 0, 6, 1000, 0, 6);
   TH2F hcrpxpy("hcpxpy", "correlation reconstructed px py; px; py", 1000, -3, 3, 1000, -3, 3);
-  TH2F hc_qp_mass2("hc_qp_mass2", "correlation qp_tof mass2; sign(q)*p (GeV/c);mass^2 (GeV)^2", 1000, -16, 16, 100, -5, 10); //tof hits
+  TH2F hc_qp_mass2("hc_qp_mass2", "correlation qp_tof mass2; sign(q)*p (GeV/c);mass^2 (GeV)^2", 500, -16, 16, 500, -5, 10); //tof hits
 
   for(int i=0; i<Nevents; i++){
     treeIn -> GetEntry(i);
@@ -162,7 +163,6 @@ void momentum(){
    hrpt.Write();
    hreta.Write();
    hrphi.Write();
-  // hrrap.Write();
    hcpx.GetXaxis()->SetTitle("reconstructed");
    hcpx.GetYaxis()->SetTitle("simulated");
    hcpx.Write();
