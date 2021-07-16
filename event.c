@@ -1,8 +1,9 @@
 void event(){
 
-  TString fileName = "1.analysistree.root";
-  TFile* fileIn = TFile::Open(fileName, "read");
-  TTree* treeIn = fileIn->Get<TTree>("rTree");
+  //TString fileName = "1.analysistree.root";
+  //TFile* fileIn = TFile::Open(fileName, "read");
+  //TTree* treeIn = fileIn->Get<TTree>("rTree");
+  AnalysisTree::Chain* treeIn = new AnalysisTree::Chain(std::vector<std::string>({"filelist.txt"}), std::vector<std::string>({"rTree"}));
 
   auto* eve_header = new AnalysisTree::EventHeader();
   auto* rec_header = new AnalysisTree::EventHeader();
@@ -10,7 +11,7 @@ void event(){
   auto* vtx_tracks = new AnalysisTree::TrackDetector();
   auto* sim_vtx_matching = new AnalysisTree::Matching();
 
-  AnalysisTree::Configuration* config = fileIn->Get<AnalysisTree::Configuration>("Configuration");
+  AnalysisTree::Configuration* config = treeIn->GetConfiguration();//fileIn->Get<AnalysisTree::Configuration>("Configuration");
   const int sx = config->GetBranchConfig("SimEventHeader").GetFieldId("vtx_x"); //simulated
   const int sy = config->GetBranchConfig("SimEventHeader").GetFieldId("vtx_y");
   const int sz = config->GetBranchConfig("SimEventHeader").GetFieldId("vtx_z");
@@ -35,24 +36,24 @@ void event(){
 
   //zadania
   TFile* fileOut1 = TFile::Open("event.root", "recreate");
-  TH1F hsx("hsx", "sim x", 1000, -3, 3); //simulated
-  TH1F hsy("hsy", "sim y", 1000, -3, 3);
-  TH1F hsz("hsz", "sim z", 1000, -3, 3);
-  TH1F hspsi("hspsi", "sim \psi", 100, 0, 8);
-  TH1F hrx("hrx", "rec x", 1000, -3, 3); //reconstructed
-  TH1F hry("hry", "rec y", 1000, -3, 3);
-  TH1F hrz("hrz", "rec z", 1000, -3, 3);
-  TH1F hrchi2("hrchi2", "rec chi2", 100, 0, 3);
-  TH1F hEpsd("hEpsd", "rec Epsd", 100, -1, 26);
-  TH1F hm("hm", "rec Multiplicity", 100, 0, 16);
-  TH1F hb("hb", "rec impact par", 100, 0, 16);
-  TH2F hcx("hcx", "corr x", 1000, -.5, .5, 1000, -.5, .5); //correlation
-  TH2F hcy("hcy", "corr y", 1000, -.5, .5, 1000, -.5, .5);
-  TH2F hcz("hcz", "corr z", 1000, -.5, .5, 1000, -.5, .5);
-  TH2F hcbm("hcbm", "corr (b, multiplicty)", 100, 0, 16, 100, 0, 16);
-  TH1F hdx("hdx", "difference x", 1000, -.2, .2); //simulated
-  TH1F hdy("hdy", "diiference y", 1000, -.2, .2);
-  TH1F hdz("hdz", "difference z", 10000, -3, 3);
+  TH1F hsx("hsx", "simulated x; x [cm]; dN/dx", 1000, -3, 3); //simulatedulated
+  TH1F hsy("hsy", "simulated y; y [cm]; dN/dy", 1000, -3, 3);
+  TH1F hsz("hsz", "simulated z; z [cm]; dN/dz", 1000, -3, 3);
+  TH1F hspsi("hspsi", "simulated #psi; #psi [rad]; dN/dx", 100, -6.5, 6.5);
+  TH1F hrx("hrx", "reconstructed x; x [cm]; dN/dx", 1000, -3, 3); //reconstructedonstructed
+  TH1F hry("hry", "reconstructed y; x [cm]; dN/dy", 1000, -3, 3);
+  TH1F hrz("hrz", "reconstructed z; x [cm]; dN/dz", 1000, -3, 3);
+  TH1F hrchi2("hrchi2", "reconstructed #{chi^2}/NDF; #{chi^2/NDF}; counts", 100, 0, 3);
+  TH1F hEpsd("hEpsd", "reconstructed Epsd; Epsd [GeV]; dN/dEpsd", 100, -1, 26);
+  TH1F hm("hm", "reconstructed multiplicity; multiplicty [STS]; counts", 100, 0, 16);
+  TH1F hb("hb", "reconstructed impact parameter; b [fm]; dN/db", 100, 0, 16);
+  TH2F hcx("hcx", "correlation px; reconstructed x; simulated x", 1000, -.5, .5, 1000, -.5, .5); //correlation
+  TH2F hcy("hcy", "correlation py; reconstructed y; simulated y", 1000, -.5, .5, 1000, -.5, .5);
+  TH2F hcz("hcz", "correlation pz; reconstructed z; simulated z", 1000, -.5, .5, 1000, -.5, .5);
+  TH2F hcbm("hcbm", "correlation (b, multiplicty)# b [fm]; multiplicty [STS]", 100, 0, 16, 100, 0, 16);
+  TH1F hdx("hdx", "difference #{x_{rec} - #{x_{sim};#Delta x [cm]; dN/d#Delta x", 1000, -.2, .2); //simulated
+  TH1F hdy("hdy", "diiference #{y_{rec} - #{y_{sim};#Delta y [cm]; dN/d#Delta y", 1000, -.2, .2);
+  TH1F hdz("hdz", "difference #{z_{rec} - #{z_{sim};#Delta z [cm]; dN/d#Delta z", 10000, -3, 3);
 
 
   for(int i=0; i<Nevents; i++){
