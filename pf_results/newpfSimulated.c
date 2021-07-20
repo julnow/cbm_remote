@@ -26,15 +26,15 @@ const int simsphi = config->GetBranchConfig("SimParticles").GetFieldId("phi");
 const int simspid = config->GetBranchConfig("SimParticles").GetFieldId("pid");
 
 //momentum
-TH1F hsimspx("hsimspx", "#Lambda_{sim} px;px [GeV/c];dN/dpx", 100, -3, 3);
-TH1F hsimspy("hsimspy", "#Lambda_{sim} py;py [GeV/c];dN/dpy", 100, -3, 3);
-TH1F hsimspz("hsimspz", "#Lambda_{sim} pz;pz [GeV/c];dN/dpz", 100, 0, 14);
-TH1F hsimspt("hsimspt", "#Lambda_{sim} pt;pt [GeV/c];dN/dpt", 100, -1, 3);
-TH1F hsimsp("hsimsp", "#Lambda_{sim} p;p [GeV/c];dN/dp", 100, 0, 14);
+TH1F hsimspx("hsimspx", "#K_{sim} px;px [GeV/c];dN/dpx", 100, -3, 3);
+TH1F hsimspy("hsimspy", "#K_{sim} py;py [GeV/c];dN/dpy", 100, -3, 3);
+TH1F hsimspz("hsimspz", "#K_{sim} pz;pz [GeV/c];dN/dpz", 100, 0, 14);
+TH1F hsimspt("hsimspt", "#K_{sim} pt;pt [GeV/c];dN/dpt", 100, -1, 3);
+TH1F hsimsp("hsimsp", "#K_{sim} p;p [GeV/c];dN/dp", 100, 0, 14);
 //correlations for sim
-TH2F hcors_rap_pt("hcors_rap_pt", "correlation #Lambda_{sim} rapidity pt; rapidity; pT [GeV/c]", 100, -1, 4,  100, -1, 4);
-TH2F hcors_phi_pt("hcors_phi_pt", "correlation #Lambda_{sim} #phi pt; #phi [#circ]; pT [GeV/c]", 100, -5, 5,  100, -0.01, 5);
-TH2F hcors_px_py("hcors_px_py", "correlations #Lambda_{sim} px py; px [GeV/c]; py [GeV/c]", 100, -3, 3,  100, -3, 3);
+TH2F hcors_rap_pt("hcors_rap_pt", "correlation #K_{sim} rapidity pt; rapidity; pT [GeV/c]", 100, -1, 4,  100, -1, 4);
+TH2F hcors_phi_pt("hcors_phi_pt", "correlation #K_{sim} #phi pt; #phi [#circ]; pT [GeV/c]", 100, -5, 5,  100, -0.01, 5);
+TH2F hcors_px_py("hcors_px_py", "correlations #K_{sim} px py; px [GeV/c]; py [GeV/c]", 100, -3, 3,  100, -3, 3);
 
 //reading of data
 
@@ -44,7 +44,7 @@ for(int i=0; i<NeventsSIM; i++){
   treeInSIM -> GetEntry(i);
   //simulated simulated
   for(const auto& sim_track : *(sims_tracks->GetChannels()) ){
-    if (sim_track.GetField<int>(simspid) == 3122){
+    if (sim_track.GetField<int>(simspid) == 310){ //kshort
       const float sims_px = sim_track.GetField<float>(simspx);
       const float sims_py = sim_track.GetField<float>(simspy);
       const float sims_pz = sim_track.GetField<float>(simspz);
