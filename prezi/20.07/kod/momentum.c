@@ -3,7 +3,7 @@ void momentum(){
   //TString fileName = "1.analysistree.root";
   //TFile* fileIn = TFile::Open(fileName, "read");
   //TTree* treeIn = fileIn->Get<TTree>("rTree");
-  AnalysisTree::Chain* treeIn = new AnalysisTree::Chain(std::vector<std::string>({"filelist.txt"}), std::vector<std::string>({"rTree"}));
+  AnalysisTree::Chain* treeIn = new AnalysisTree::Chain(std::vector<std::string>({"fileslist.txt"}), std::vector<std::string>({"rTree"}));
 
   auto* eve_header = new AnalysisTree::EventHeader();
   auto* rec_header = new AnalysisTree::EventHeader();
@@ -22,6 +22,7 @@ void momentum(){
   const int sx = treeIn->GetConfiguration()->GetBranchConfig("SimParticles").GetFieldId("x");
   const int sy = treeIn->GetConfiguration()->GetBranchConfig("SimParticles").GetFieldId("y");
   const int sz = treeIn->GetConfiguration()->GetBranchConfig("SimParticles").GetFieldId("z");
+  const int smother_id = treeIn->GetConfiguration()->GetBranchConfig("SimParticles").GetFieldId("mother_id");
   const int rp = treeIn->GetConfiguration()->GetBranchConfig("VtxTracks").GetFieldId("p"); //reconstructed
   const int rpT = treeIn->GetConfiguration()->GetBranchConfig("VtxTracks").GetFieldId("pT");
   const int reta = treeIn->GetConfiguration()->GetBranchConfig("VtxTracks").GetFieldId("eta");
@@ -44,10 +45,10 @@ void momentum(){
   TFile* fileOut1 = TFile::Open("momentum.root", "recreate");
   TH1F hspx("hspx", "simulated px;px [GeV/c];dN/dpx", 1000, -.4, .4); //simulatedulated
   TH1F hspy("hspy", "simulated py;py [GeV/c];dN/dpy", 1000, -.4, .4);
-  TH1F hspz("hspz", "simulated pz;pz [GeV/c];dN/dpz", 1000, -.2, .4);
-  TH1F hsphi("hsphi", "simulated #phi; #phi [#circ];dN/d#phi; ", 1000, -3.5, 3.5);
+  TH1F hspz("hspz", "simulated pz;pz [GeV/c];dN/dpz", 1000, -.4, 10);
+  TH1F hsphi("hsphi", "simulated #phi; #phi [#circ];dN/d#phi; ", 500, -3.5, 3.5);
   TH1F hsp("hsp", "simulated p;p [GeV/c];dN/dp", 1000, -.1, .6);
-  TH1F hspt("hspt", "simulated pT;pT [GeV/c];dN/dpT", 1000, -.1, .6);
+  TH1F hspt("hspt", "simulated pT;pT [GeV/c];dN/dpT", 1000, -.1, 2.5);
   TH1F hseta("hseta", "simulated #eta; #eta; dN/d#eta", 1000, -4, 10);
   TH1F hsrap("hsrap", "simulated rapidity; rapidity; counts", 1000, -3, 6);
   TH1F hsx("hsx", "simulated x; x; dN/dx", 100, -3, 3);
@@ -56,7 +57,7 @@ void momentum(){
   TH1F hrpx("hrpx", "reconstructed px;px [GeV/c];dN/dpx", 1000, -2, 2); //reconstructedonstructed
   TH1F hrpy("hrpy", "reconstructed py;py [GeV/c];dN/dpy", 1000, -2, 2);
   TH1F hrpz("hrpz", "reconstructed pz;pz [GeV/c];dN/dpz", 1000, -.1, 10);
-  TH1F hrphi("hrphi", "reconstructed #phi; #phi [#circ];dN/d#phi", 500, -3.5, 3.5);
+  TH1F hrphi("hrphi", "reconstructed #phi; #phi [#circ];dN/d#phi", 250, -3.5, 3.5);
   TH1F hrp("hrp", "reconstructed p;p [GeV/c];dN/dp", 1000, -.1, 10);
   TH1F hrpt("hrpt", "reconstructed pT;pT [GeV/c];dN/dpT", 1000, -.1, 2.5);
   TH1F hreta("hreta", "reconstructed #eta; #eta; dN/d#eta", 1000, 0, 6);
@@ -81,6 +82,9 @@ void momentum(){
     }
     //simulated
     for(const auto& sim_track : *(sim_tracks->GetChannels()) ){
+      const int sim_mother_id = sim_track.GetField<int>(smother_id);
+      const float sim_rap = sim_track.GetField<float>(srap);
+      if (sim_mother_id != -1 || (sim_rap <.5 || sim_rap >2.8)) continue; //excluding bullet particles and spectator particles
       const float sim_px = sim_track.GetPx();
       const float sim_py = sim_track.GetPy();
       const float sim_pz = sim_track.GetPz();
@@ -88,7 +92,6 @@ void momentum(){
       const float sim_pt = sim_track.GetField<float>(spT);
       const float sim_eta = sim_track.GetField<float>(seta);
       const float sim_phi = sim_track.GetField<float>(sphi);
-      const float sim_rap = sim_track.GetField<float>(srap);
       const float sim_x = sim_track.GetField<float>(sx);
       const float sim_y = sim_track.GetField<float>(sy);
       const float sim_z = sim_track.GetField<float>(sz);

@@ -39,32 +39,32 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
   const int simrp = config->GetBranchConfig("Simulated").GetFieldId("p");
 
   //Candidates
-  TH1F hcanpx("hcanpx", "#K_{can} px;px [GeV/c];dN/dpx", 100, -3, 3);
-  TH1F hcanpy("hcanpy", "#K_{can} py;py [GeV/c];dN/dpy", 100, -3, 3);
-  TH1F hcanpz("hcanpz", "#K_{can} pz;pz [GeV/c];dN/dpz", 100, 0, 14);
-  TH1F hcanpt("hcanpt", "#K_{can} pt;pt [GeV/c];dN/dpt", 100, -1, 3);
-  TH1F hcanp("hcanp", "#K_{can} p;p [GeV/c];dN/dp", 100, 0, 14);
-  TH1F hcanphi("hcanphi", "#K_{can} #phi;#phi [rad];dN/d#phi", 100, -3.14, 3.14);
-  //#K_{can} - #K_{sim}
-  TH1F hdifpx("hdifpx", "#K_{can} - #K_{sim} px;px [GeV/c];dN/dpx", 100, -.4, .4);
-  TH1F hdifpy("hdifpy", "#K_{can} - #K_{sim} py;py [GeV/c];dN/dpy", 100, -.4, .4);
-  TH1F hdifpz("hdifpz", "#K_{can} - #K_{sim} pz;pz [GeV/c];dN/dpz", 100, -.8, .8);
-  TH1F hdifpt("hdifpt", "#K_{can} - #K_{sim} pt;pt [GeV/c];dN/dpt", 100, -.4, .4);
-  TH1F hdifp("hdifp", "#K_{can} - #K_{sim} p;p [GeV/c];dN/dp", 100, -.8, .8);
+  TH1F hcanpx("hcanpx", "K_{can} px;px [GeV/c];dN/dpx", 100, -2, 2);
+  TH1F hcanpy("hcanpy", "K_{can} py;py [GeV/c];dN/dpy", 100, -2, 2);
+  TH1F hcanpz("hcanpz", "K_{can} pz;pz [GeV/c];dN/dpz", 100, 0, 12);
+  TH1F hcanpt("hcanpt", "K_{can} pt;pt [GeV/c];dN/dpt", 100, -.1, 2);
+  TH1F hcanp("hcanp", "K_{can} p;p [GeV/c];dN/dp", 100, 0, 12);
+  TH1F hcanphi("hcanphi", "K_{can} #phi;#phi [rad];dN/d#phi", 100, -3.14, 3.14);
+  //K_{can} - K_{sim}
+  TH1F hdifpx("hdifpx", "K_{can} - K_{sim} px;px [GeV/c];dN/dpx", 100, -2, 2);
+  TH1F hdifpy("hdifpy", "K_{can} - K_{sim} py;py [GeV/c];dN/dpy", 100, -2, 2);
+  TH1F hdifpz("hdifpz", "K_{can} - K_{sim} pz;pz [GeV/c];dN/dpz", 100, -12, 12);
+  TH1F hdifpt("hdifpt", "K_{can} - K_{sim} pt;pt [GeV/c];dN/dpt", 100, -2, 2);
+  TH1F hdifp("hdifp", "K_{can} - K_{sim} p;p [GeV/c];dN/dp", 100, -12, 12);
   //correlations
-  TH2F hcorpx("hcorpx", "correlations px; #K_{can}; #K_{sim}", 100, -3, 3,  100, -3, 3);
-  TH2F hcorpy("hcorpy", "correlations py; #K_{can}; #K_{sim}", 100, -3, 3,  100, -3, 3);
-  TH2F hcorpz("hcorpz", "correlations pz; #K_{can}; #K_{sim}", 100, 0, 14,  100, 0, 14);
-  TH2F hcorr_px_py("hcorr_px_py", "correlations #K_{can} px py; px [GeV/c]; py [GeV/c]", 100, -3, 3,  100, -3, 3);
-  TH2F hcorpt("hcorpt", "correlations pt; #K_{can}; #K_{sim}", 100, -1, 3,  100, -1, 3);
-  TH2F hcorp("hcorp", "correlations p; #K_{can}; #K_{sim}", 100, 0, 14,  100, 0, 14);
-  TH2F hcorr_rap_pt("hcorr_rap_pt", "correlation #K_{can} rapidity pT; rapidity; pT [GeV/c]", 100, -1, 4,  100, -1, 4);
-  TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation #K_{can} #phi pT; #phi [#circ]; pT [GeV/c]", 100, -5, 5,  100, -0.01, 5);
+  TH2F hcorpx("hcorpx", "correlations px; K_{can}; K_{sim}", 100, -2, 2,  100, -2, 2);
+  TH2F hcorpy("hcorpy", "correlations py; K_{can}; K_{sim}", 100, -2, 2,  100, -2, 2);
+  TH2F hcorpz("hcorpz", "correlations pz; K_{can}; K_{sim}", 100, -8, 8,  100, 0, 20);
+  TH2F hcorr_px_py("hcorr_px_py", "correlations K_{can} px py; px [GeV/c]; py [GeV/c]", 100, -2, 2,  100, -2, 2);
+  TH2F hcorpt("hcorpt", "correlations pt; K_{can}; K_{sim}", 100, -1, 3,  100, -1, 3);
+  TH2F hcorp("hcorp", "correlations p; K_{can}; K_{sim}", 100, -8, 8,  100, 0, 20);
+  TH2F hcorr_rap_pt("hcorr_rap_pt", "correlation K_{can} rapidity pT; rapidity; pT [GeV/c]", 100, -1, 4,  100, -1, 4);
+  TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation K_{can} #phi pT; #phi [#circ]; pT [GeV/c]", 100, -5, 5,  100, -0.01, 5);
   //chi2
-  TH1F hchi2_geo("chi2_geo", "chi2_geo; chi2_geo; #", 100, -1, 6);
-  TH1F hchi2_prim_first("chi2_prim_first", "chi2_prim_first; chi2_prim_first; #", 200, -1, 1000);
-  TH1F hchi2_prim_second("chi2_prim_second", "chi2_prim_second; chi2_prim_second; #", 200, -1, 1000);
-  TH1F hchi2_topo("chi2_topo", "chi2_topo; chi2_topo; #", 100, -1, 10);
+  TH1F hchi2_geo("hchi2_geo", "chi2_geo; chi2_geo; counts", 100, -1, 6);
+  TH1F hchi2_prim_first("hchi2_prim_first", "chi2_prim_first; chi2_prim_first; counts", 200, -1, 2000);
+  TH1F hchi2_prim_second("hchi2_prim_second", "chi2_prim_second; chi2_prim_second; counts", 200, -1, 1000);
+  TH1F hchi2_topo("hchi2_topo", "chi2_topo; chi2_topo; counts", 100, -1, 100);
 
 
     //reading data from pfsimple file
@@ -89,6 +89,7 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
       hcanpz.Fill(can_pz);
       hcanpt.Fill(can_pt);
       hcanp.Fill(can_p);
+      hcanphi.Fill(can_phi);
       //correlation for reconstructed
       hcorr_rap_pt.Fill(can_rap, can_pt);
       hcorr_px_py.Fill(can_px, can_py);
@@ -133,11 +134,7 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
   hcanpz.Write();
   hcanpt.Write();
   hcanp.Write();
-  hsimspx->Write();
-  hsimspy->Write();
-  hsimspz->Write();
-  hsimspt->Write();
-  hsimsp->Write();
+  hcanphi.Write();
   hdifpx.Write();
   hdifpy.Write();
   hdifpz.Write();
@@ -155,9 +152,7 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
   hcorr_px_py.Write();
   hcorr_rap_pt.Write();
   hcorr_phi_pt.Write();
-  hcors_px_py->Write();
-  hcors_rap_pt->Write();
-  hcors_phi_pt->Write();
+
 
   fileOut1->Close();
 }

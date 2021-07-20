@@ -3,7 +3,7 @@ void event(){
   //TString fileName = "1.analysistree.root";
   //TFile* fileIn = TFile::Open(fileName, "read");
   //TTree* treeIn = fileIn->Get<TTree>("rTree");
-  AnalysisTree::Chain* treeIn = new AnalysisTree::Chain(std::vector<std::string>({"filelist.txt"}), std::vector<std::string>({"rTree"}));
+  AnalysisTree::Chain* treeIn = new AnalysisTree::Chain(std::vector<std::string>({"fileslist.txt"}), std::vector<std::string>({"rTree"}));
 
   auto* eve_header = new AnalysisTree::EventHeader();
   auto* rec_header = new AnalysisTree::EventHeader();
@@ -45,12 +45,12 @@ void event(){
   TH1F hrz("hrz", "reconstructed z; x [cm]; dN/dz", 100, -.08, .08);
   TH1F hrchi2("hrchi2", "reconstructed #chi^{2}/NDF; #chi^{2}/NDF; counts", 100, 0, 3);
   TH1F hEpsd("hEpsd", "reconstructed Epsd; Epsd [GeV]; dN/dEpsd", 100, -1, 60);
-  TH1F hm("hm", "reconstructed multiplicity; multiplicty [STS]; counts", 100, 0, 3);
+  TH1F hm("hm", "reconstructed multiplicity; multiplicty [STS]; counts", 100, 0, 600);
   TH1F hb("hb", "reconstructed impact parameter; b [fm]; dN/db", 100, 0, 16);
   TH2F hcx("hcx", "correlation px; reconstructed x; simulated x", 1000, -.6, .6, 1000, -.6, .6); //correlation
   TH2F hcy("hcy", "correlation py; reconstructed y; simulated y", 1000, -.6, .6, 1000, -.6, .6);
   TH2F hcz("hcz", "correlation pz; reconstructed z; simulated z", 1000, -.08, .08, 1000, -.08, .08);
-  TH2F hcbm("hcbm", "correlation (b, multiplicty); b [fm]; multiplicty [STS]", 100, 0, 16, 100, 0, 6);
+  TH2F hcbm("hcbm", "correlation (b, multiplicty); b [fm]; multiplicty [STS]", 100, 0, 16, 1000, 0, 1000);
   TH1F hdx("hdx", "difference x_{rec} - x_{sim};#Delta x [cm]; dN/d#Delta x", 100, -.01, .01); //simulated
   TH1F hdy("hdy", "diiference y_{rec} - y_{sim};#Delta y [cm]; dN/d#Delta y", 100, -.01, .01);
   TH1F hdz("hdz", "difference z_{rec} -  z_{sim};#Delta z [cm]; dN/d#Delta z", 1000, -.2, .2);
@@ -75,7 +75,7 @@ void event(){
        hrchi2.Fill(rec_header->GetField<float>(rchi2));
        const float rec_epsd = rec_header->GetField<float>(rEpsd);
        hEpsd.Fill(rec_epsd);
-       const float rec_m = rec_header->GetField<float>(rm);
+       const int rec_m = rec_header->GetField<int>(rm);
        hm.Fill(rec_m);
        const float sim_b = eve_header->GetField<float>(sb);
        hb.Fill(sim_b);
@@ -87,7 +87,7 @@ void event(){
        hdy.Fill(sim_y - rec_y);
        hdz.Fill(sim_z - rec_z);
   }
-
+   gStyle->SetOptStat(0);
    hsx.Write();
    hsy.Write();
    hsz.Write();

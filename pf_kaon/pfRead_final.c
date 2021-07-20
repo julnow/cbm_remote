@@ -1,6 +1,6 @@
-TH2F **relativeError(TH2F **hrec, TH2F **hsim){ //finds relative error of division of 2 histograms
+TH2F *relativeError(TH2F *hrec, TH2F *hsim){ //finds relative error of division of 2 histograms
 
-  TH2F **hrel = (TH2F*) hrec->Clone();
+  TH2F *hrel = (TH2F*) hrec->Clone();
 
   float delta, delta1, delta2 = 0.f;
   float simContent, recContent;
@@ -9,7 +9,7 @@ TH2F **relativeError(TH2F **hrec, TH2F **hsim){ //finds relative error of divisi
      for (int j=1; j<=hrec->GetNbinsY(); j++) {
        recContent = hrec->GetBinContent(i,j);
        simContent = hsim->GetBinContent(i,j);
-       if (recContent != 0  simContent != 0){
+       if (recContent != 0 && simContent != 0){
          //delta in 3 steps:
          delta1 = 1 / recContent;
          delta2 = 1 / simContent;
@@ -139,19 +139,19 @@ void pfRead_final(const char *pfReadFileName, const char *outputFileName, const 
 
   //division of histograms
   TH2F* hcord_rap_pt;
-  hcord_rap_pt = (TH2F*) hcorr_rap_pt.Clone();
+  hcord_rap_pt = (TH2F*) hcorr_rap_pt->Clone();
   hcord_rap_pt->Divide(hcors_rap_pt);
   hcord_rap_pt->SetNameTitle("hcord_rap_pt", "division correlation rapidity pt; rapidity; pT");
   TH2F* hcordr_rap_pt = relativeError(hcorr_rap_pt, hcors_rap_pt); //relative error
   hcordr_rap_pt->SetNameTitle("hcordr_rap_pt", "#frac{#Delta #varepsilon}{#varepsilon} correlation rapidity pT; rapidity; pT");
   TH2F* hcord_phi_pt;
-  hcord_phi_pt = (TH2F*) hcorr_phi_pt.Clone();
+  hcord_phi_pt = (TH2F*) hcorr_phi_pt->Clone();
   hcord_phi_pt->Divide(hcors_phi_pt);
   hcord_phi_pt->SetNameTitle("hcord_rphi_pt", "division correlation #phi pT; #phi; pT");
   TH2F* hcordr_phi_pt = relativeError(hcorr_phi_pt, hcors_phi_pt); //relative error
   hcordr_phi_pt->SetNameTitle("hcordr_phi_pt", "#frac{#Delta #varepsilon}{#varepsilon} correlation #phi pT; #phi; pT");
   TH2F* hcord_px_py;
-  hcord_px_py = (TH2F*) hcorr_px_py.Clone();
+  hcord_px_py = (TH2F*) hcorr_px_py->Clone();
   hcord_px_py->Divide(hcors_px_py);
   hcord_px_py->SetNameTitle("hcord_px_py", "division correlations px py; px; py");
   TH2F* hcordr_px_py = relativeError(hcorr_px_py, hcors_px_py); //relative error
