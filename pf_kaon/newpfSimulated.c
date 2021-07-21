@@ -54,7 +54,7 @@ for(int i=0; i<NeventsSIM; i++){
       const float sims_p = sim_track.GetField<float>(simsp);
       const float sims_rap = sim_track.GetField<float>(simsrap);
       const float sims_phi = sim_track.GetField<float>(simsphi);
-      const float sims_mass = can_head.GetField<float>(simmass);
+      const float sims_mass = sim_track.GetField<float>(simmass);
       hsimspx.Fill(sims_px);
       hsimspy.Fill(sims_py);
       hsimspz.Fill(sims_pz);

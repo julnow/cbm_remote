@@ -58,12 +58,12 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
   TH2F hcorpx("hcorpx", "correlations px; K_{can}; K_{sim}", 100, -2, 2,  100, -2, 2);
   TH2F hcorpy("hcorpy", "correlations py; K_{can}; K_{sim}", 100, -2, 2,  100, -2, 2);
   TH2F hcorpz("hcorpz", "correlations pz; K_{can}; K_{sim}", 100, -8, 8,  100, -8, 20);
-  TH2F hcorpz("hcorpz", "correlations pz; K_{can}; K_{sim}", 100, -8, 8,  100, -8, 20);
   TH2F hcormass("hcormass", "correlations mass; K_{can}; K_{sim}", 100, 0, 1,  100, 0, 1);
   TH2F hcorpt("hcorpt", "correlations pt; K_{can}; K_{sim}", 100, -1, 3,  100, -1, 3);
   TH2F hcorp("hcorp", "correlations p; K_{can}; K_{sim}", 100, -8, 8,  100, 0, 20);
   TH2F hcorr_rap_pt("hcorr_rap_pt", "correlation K_{can} rapidity pT; rapidity; pT [GeV/c]", 100, -1, 4,  100, -1, 4);
-  TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation K_{can} #phi pT; #phi [#circ]; pT [GeV/c]", 100, -5, 5,  100, -0.01, 5);
+  TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation K_{can} #phi pT; #phi [#circ]; pT [GeV/c]", 100, -5, 5,  100, -0.01, 5);\
+  TH2F hcorr_px_py("hcorr_px_py", "correlations K_{can} px py; px [GeV/c]; py [GeV/c]", 100, -3, 3,  100, -3, 3);
   //chi2
   TH1F hchi2_geo("hchi2_geo", "chi2_geo; chi2_geo; counts", 100, -1, 6);
   TH1F hchi2_prim_first("hchi2_prim_first", "chi2_prim_first; chi2_prim_first; counts", 200, -1, 2000);
