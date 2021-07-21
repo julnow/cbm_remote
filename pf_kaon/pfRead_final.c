@@ -120,6 +120,7 @@ void pfRead_final(const char *pfReadFileName, const char *outputFileName, const 
   TH1F* hsimspz;
   TH1F* hsimspt;
   TH1F* hsimsp;
+  TH1F* hsimmass;
   //correlations for sim
   TH2F* hcors_rap_pt;
   TH2F* hcors_phi_pt;
@@ -134,6 +135,8 @@ void pfRead_final(const char *pfReadFileName, const char *outputFileName, const 
   hsimspt->SetDirectory(0);
   simFile.GetObject("hsimsp",hsimsp);
   hsimsp->SetDirectory(0);
+  simFile.GetObject("hsimmass",hsimmass);
+  hsimmass->SetDirectory(0);
   simFile.GetObject("hcors_rap_pt",hcors_rap_pt);
   hcors_rap_pt->SetDirectory(0);
   simFile.GetObject("hcors_phi_pt",hcors_phi_pt);
@@ -176,6 +179,7 @@ void pfRead_final(const char *pfReadFileName, const char *outputFileName, const 
   hsimspz->Write();
   hsimspt->Write();
   hsimsp->Write();
+  hsimmass->Write();
   hdifpx->Write();
   hdifpy->Write();
   hdifpz->Write();
