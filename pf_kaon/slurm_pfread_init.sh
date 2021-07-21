@@ -10,19 +10,9 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lustre/cbm/users/$USER/pf_simple/instal
 export AnalysisTree_DIR=/lustre/cbm/users/$USER/AnalysisTree/install/lib/cmake/AnalysisTree
 
 INDEX=${SLURM_ARRAY_TASK_ID}
-WORK=/lustre/cbm/users/$USER
-#path to pf simpled
-pfpath=$WORK/pf_simple/mainkaon
-#path to simulated files
+WORK=/lustre/cbm/users/$USER/pf_kaon
 
-#splitting into 100 fileslist with 50 files
-mkdir -p $PWD/mainkaon
-list=$PWD/mainkaon/filelist_${INDEX}.txt
-: >  $list
-for ((i=1+50*(INDEX-1); i<=50*INDEX; i++)); do
-  echo /lustre/cbm/users/lubynets/cbm2atree/outputs/apr20_fr_18.2.1_fs_jun19p1/dcmqgsm_smm_pluto/auau/12agev/mbias/sis100_electron_target_25_mkm/AT2/$i/$i.analysistree.root >>  $list
-done
-mkdir -p $PWD/pfsimple/${INDEX}
-cd $PWD/pfsimple/${INDEX}
-#run pf_simple on each file
-$pfpath $WORK/pf_kaon/mainkaon/filelist_${INDEX}.txt
+path=$WORK/pfsimple/${INDEX}/analysis_tree.root
+output=$WORK/pfsimple/${INDEX}/read_init.root
+#run pf_Read_init over each file from pfsimple
+root -l -b -q "$WORK/pfRead_initial.c(\"$path\", \"$output\")" >& log_${INDEX}.txt

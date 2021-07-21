@@ -31,12 +31,14 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
   const int canrap = config->GetBranchConfig("Candidates").GetFieldId("rapidity");
   const int canphi = config->GetBranchConfig("Candidates").GetFieldId("phi");
   const int cangen = config->GetBranchConfig("Candidates").GetFieldId("generation");
+  const int canmass = config->GetBranchConfig("Candidates").GetFieldId("mass");
   //simulated reconstructed
   const int simrpx = config->GetBranchConfig("Simulated").GetFieldId("px");
   const int simrpy = config->GetBranchConfig("Simulated").GetFieldId("py");
   const int simrpz = config->GetBranchConfig("Simulated").GetFieldId("pz");
   const int simrpt = config->GetBranchConfig("Simulated").GetFieldId("pT");
   const int simrp = config->GetBranchConfig("Simulated").GetFieldId("p");
+  const int simrmass = config->GetBranchConfig("Simulated").GetFieldId("mass");
 
   //Candidates
   TH1F hcanpx("hcanpx", "K_{can} px;px [GeV/c];dN/dpx", 100, -2, 2);
@@ -45,6 +47,7 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
   TH1F hcanpt("hcanpt", "K_{can} pt;pt [GeV/c];dN/dpt", 100, -.1, 2);
   TH1F hcanp("hcanp", "K_{can} p;p [GeV/c];dN/dp", 100, 0, 12);
   TH1F hcanphi("hcanphi", "K_{can} #phi;#phi [rad];dN/d#phi", 100, -3.14, 3.14);
+  TH1F hcanmass("hcanmass", "K_{can} mass;mass [GeV/c^2];dN/dmass", 100, 0.3, .7);
   //K_{can} - K_{sim}
   TH1F hdifpx("hdifpx", "K_{can} - K_{sim} px;px [GeV/c];dN/dpx", 100, -2, 2);
   TH1F hdifpy("hdifpy", "K_{can} - K_{sim} py;py [GeV/c];dN/dpy", 100, -2, 2);
@@ -54,8 +57,9 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
   //correlations
   TH2F hcorpx("hcorpx", "correlations px; K_{can}; K_{sim}", 100, -2, 2,  100, -2, 2);
   TH2F hcorpy("hcorpy", "correlations py; K_{can}; K_{sim}", 100, -2, 2,  100, -2, 2);
-  TH2F hcorpz("hcorpz", "correlations pz; K_{can}; K_{sim}", 100, -8, 8,  100, 0, 20);
-  TH2F hcorr_px_py("hcorr_px_py", "correlations K_{can} px py; px [GeV/c]; py [GeV/c]", 100, -2, 2,  100, -2, 2);
+  TH2F hcorpz("hcorpz", "correlations pz; K_{can}; K_{sim}", 100, -8, 8,  100, -8, 20);
+  TH2F hcorpz("hcorpz", "correlations pz; K_{can}; K_{sim}", 100, -8, 8,  100, -8, 20);
+  TH2F hcormass("hcormass", "correlations mass; K_{can}; K_{sim}", 100, 0, 1,  100, 0, 1);
   TH2F hcorpt("hcorpt", "correlations pt; K_{can}; K_{sim}", 100, -1, 3,  100, -1, 3);
   TH2F hcorp("hcorp", "correlations p; K_{can}; K_{sim}", 100, -8, 8,  100, 0, 20);
   TH2F hcorr_rap_pt("hcorr_rap_pt", "correlation K_{can} rapidity pT; rapidity; pT [GeV/c]", 100, -1, 4,  100, -1, 4);
@@ -83,6 +87,7 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
       const float can_p = can_head.GetField<float>(canp);
       const float can_rap = can_head.GetField<float>(canrap);
       const float can_phi = can_head.GetField<float>(canphi);
+      const float can_mass = can_head.GetField<float>(canmass);
 
       hcanpx.Fill(can_px);
       hcanpy.Fill(can_py);
@@ -90,6 +95,7 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
       hcanpt.Fill(can_pt);
       hcanp.Fill(can_p);
       hcanphi.Fill(can_phi);
+      hcanmass.Fill(can_mass);
       //correlation for reconstructed
       hcorr_rap_pt.Fill(can_rap, can_pt);
       hcorr_px_py.Fill(can_px, can_py);
@@ -102,6 +108,7 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
       const float simr_pz = simr_header->GetChannel(simr_id).GetField<float>(simrpz);
       const float simr_pt = simr_header->GetChannel(simr_id).GetField<float>(simrpt);
       const float simr_p = simr_header->GetChannel(simr_id).GetField<float>(simrp);
+      const float simr_mass = simr_header->GetChannel(simr_id).GetField<float>(simrmass);
       //differences
       hdifpx.Fill(can_px - simr_px);
       hdifpy.Fill(can_py - simr_py);
@@ -114,6 +121,7 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
       hcorpz.Fill(can_pz, simr_pz);
       hcorpt.Fill(can_pt, simr_pt);
       hcorp.Fill(can_p, simr_p);
+      hcormass.Fill(can_mass, simr_mass);
       //chi2
       const float can_chi2_geo = can_head.GetField<float>(chi2_geo);
       const float can_chi2_prim_first = can_head.GetField<float>(chi2_prim_first);
@@ -135,6 +143,7 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
   hcanpt.Write();
   hcanp.Write();
   hcanphi.Write();
+  hcanmass.Write();
   hdifpx.Write();
   hdifpy.Write();
   hdifpz.Write();
@@ -145,6 +154,7 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
   hcorpz.Write();
   hcorpt.Write();
   hcorp.Write();
+  hcormass.Write();
   hchi2_geo.Write();
   hchi2_prim_first.Write();
   hchi2_prim_second.Write();
