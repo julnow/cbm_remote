@@ -50,6 +50,9 @@ void pfRead_final(const char *pfReadFileName, const char *outputFileName, const 
   TH1F *hcanphi;
   pfReadFile.GetObject("hcanphi",hcanphi);
   hcanphi->SetDirectory(0);
+  TH1F *hcanmass;
+  pfReadFile.GetObject("hcanmass",hcanmass);
+  hcanmass->SetDirectory(0);
   //#K_{can} - #K_{sim}
   TH1F *hdifpx;
   pfReadFile.GetObject("hdifpx",hdifpx);
@@ -85,6 +88,9 @@ void pfRead_final(const char *pfReadFileName, const char *outputFileName, const 
   TH2F *hcorp;
   pfReadFile.GetObject("hcorp",hcorp);
   hcorp->SetDirectory(0);
+  TH2F *hcormass;
+  pfReadFile.GetObject("hcormass",hcormass);
+  hcormass->SetDirectory(0);
   TH2F *hcorr_rap_pt;
   pfReadFile.GetObject("hcorr_rap_pt",hcorr_rap_pt);
   hcorr_rap_pt->SetDirectory(0);
@@ -164,6 +170,7 @@ void pfRead_final(const char *pfReadFileName, const char *outputFileName, const 
   hcanpz->Write();
   hcanpt->Write();
   hcanp->Write();
+  hcanmass->Write();
   hsimspx->Write();
   hsimspy->Write();
   hsimspz->Write();
@@ -179,6 +186,7 @@ void pfRead_final(const char *pfReadFileName, const char *outputFileName, const 
   hcorpz->Write();
   hcorpt->Write();
   hcorp->Write();
+  hcormass->Write();
   hchi2_geo->Write();
   hchi2_prim_first->Write();
   hchi2_prim_second->Write();

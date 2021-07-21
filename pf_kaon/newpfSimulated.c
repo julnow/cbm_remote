@@ -24,6 +24,7 @@ const int simsp = config->GetBranchConfig("SimParticles").GetFieldId("p");
 const int simsrap = config->GetBranchConfig("SimParticles").GetFieldId("rapidity");
 const int simsphi = config->GetBranchConfig("SimParticles").GetFieldId("phi");
 const int simspid = config->GetBranchConfig("SimParticles").GetFieldId("pid");
+const int simmass = config->GetBranchConfig("SimParticles").GetFieldId("mass");
 
 //momentum
 TH1F hsimspx("hsimspx", "K_{sim} px;px [GeV/c];dN/dpx", 100, -3, 3);
@@ -31,6 +32,7 @@ TH1F hsimspy("hsimspy", "K_{sim} py;py [GeV/c];dN/dpy", 100, -3, 3);
 TH1F hsimspz("hsimspz", "K_{sim} pz;pz [GeV/c];dN/dpz", 100, 0, 14);
 TH1F hsimspt("hsimspt", "K_{sim} pt;pt [GeV/c];dN/dpt", 100, -1, 3);
 TH1F hsimsp("hsimsp", "K_{sim} p;p [GeV/c];dN/dp", 100, 0, 14);
+TH1F hsimmass("hsimmass", "K_{sim} mass;mass [GeV/c^2];dN/dmass", 100, 0.3, .7);
 //correlations for sim
 TH2F hcors_rap_pt("hcors_rap_pt", "correlation K_{sim} rapidity pt; rapidity; pT [GeV/c]", 100, -1, 4,  100, -1, 4);
 TH2F hcors_phi_pt("hcors_phi_pt", "correlation K_{sim} #phi pt; #phi [#circ]; pT [GeV/c]", 100, -5, 5,  100, -0.01, 5);
@@ -52,11 +54,13 @@ for(int i=0; i<NeventsSIM; i++){
       const float sims_p = sim_track.GetField<float>(simsp);
       const float sims_rap = sim_track.GetField<float>(simsrap);
       const float sims_phi = sim_track.GetField<float>(simsphi);
+      const float sims_mass = can_head.GetField<float>(simmass);
       hsimspx.Fill(sims_px);
       hsimspy.Fill(sims_py);
       hsimspz.Fill(sims_pz);
       hsimspt.Fill(sims_pt);
       hsimsp.Fill(sims_p);
+      hsimmass.Fill(sims_mass);
       //correlations for simulated
       hcors_rap_pt.Fill(sims_rap, sims_pt);
       hcors_px_py.Fill(sims_px, sims_py);
@@ -71,6 +75,7 @@ hsimspy.Write();
 hsimspz.Write();
 hsimspt.Write();
 hsimsp.Write();
+hsimmass.Write();
 hcors_rap_pt.Write();
 hcors_px_py.Write();
 hcors_phi_pt.Write();
