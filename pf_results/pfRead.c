@@ -56,6 +56,7 @@ void pfRead(const char *fileName, const char *outputFileName){
   const int canrap = config->GetBranchConfig("Candidates").GetFieldId("rapidity");
   const int canphi = config->GetBranchConfig("Candidates").GetFieldId("phi");
   const int cangen = config->GetBranchConfig("Candidates").GetFieldId("generation");
+  const int canmass = config->GetBranchConfig("Candidates").GetFieldId("mass");
   //simulated reconstructed
   const int simrpx = config->GetBranchConfig("Simulated").GetFieldId("px");
   const int simrpy = config->GetBranchConfig("Simulated").GetFieldId("py");
@@ -76,6 +77,7 @@ void pfRead(const char *fileName, const char *outputFileName){
   TH1F hdifpz("hdifpz", "#Lambda_{can} - #Lambda_{sim} pz;pz [GeV/c];dN/dpz", 100, -.8, .8);
   TH1F hdifpt("hdifpt", "#Lambda_{can} - #Lambda_{sim} pt;pt [GeV/c];dN/dpt", 100, -.4, .4);
   TH1F hdifp("hdifp", "#Lambda_{can} - #Lambda_{sim} p;p [GeV/c];dN/dp", 100, -.8, .8);
+  TH2F hcormass("hcormass", "correlations mass; K_{can}; K_{sim}", 100, 0, 1,  100, 0, 1);
   //correlations
   TH2F hcorpx("hcorpx", "correlations px; #Lambda_{can}; #Lambda_{sim}", 100, -3, 3,  100, -3, 3);
   TH2F hcorpy("hcorpy", "correlations py; #Lambda_{can}; #Lambda_{sim}", 100, -3, 3,  100, -3, 3);
@@ -136,12 +138,14 @@ void pfRead(const char *fileName, const char *outputFileName){
       const float can_p = can_head.GetField<float>(canp);
       const float can_rap = can_head.GetField<float>(canrap);
       const float can_phi = can_head.GetField<float>(canphi);
+      const float can_mass = can_head.GetField<float>(canmass);
 
       hcanpx.Fill(can_px);
       hcanpy.Fill(can_py);
       hcanpz.Fill(can_pz);
       hcanpt.Fill(can_pt);
       hcanp.Fill(can_p);
+      hcanmass.Fill(can_mass);
       //correlation for reconstructed
       hcorr_rap_pt.Fill(can_rap, can_pt);
       hcorr_px_py.Fill(can_px, can_py);
@@ -220,6 +224,7 @@ void pfRead(const char *fileName, const char *outputFileName){
   hcorpz.Write();
   hcorpt.Write();
   hcorp.Write();
+  hcanmass.Write();
   hchi2_geo.Write();
   hchi2_prim_first.Write();
   hchi2_prim_second.Write();

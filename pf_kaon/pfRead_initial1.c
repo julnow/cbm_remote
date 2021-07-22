@@ -1,6 +1,6 @@
 
 //reading from pfsimple for each file
-void pfRead_initial(const char *fileName, const char *outputFileName){
+void pfRead_initial1(const char *fileName, const char *outputFileName){
 
   TFile* fileInPF = TFile::Open(fileName, "read");
   TTree* treeInPF = fileInPF->Get<TTree>("aTree");
@@ -81,7 +81,7 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
   TH1F hcosine_first("hcosine_first", "cosine of angle between #pi_{+} and kaon; cos #alpha_{K #pi_{+}}; counts", 1000, .9, 1);
   TH1F hcosine_second("hcosine_second", "cosine of angle between #pi_{-} and kaon; cos #alpha_{K #pi_{+}}; counts", 1000, .9, 1);
   TH1F hcosine_topo("hcosine_topo", "cosine topological; cos_{topo}; counts", 500, .9, 1);
-  TH1F hdistance("hdistance", "DCA between secondary tracks; DCA_{#pi_{+}#pi_{-}} [cm]; counts", 500, 0, 1.5);
+  TH1F hdistance("hdistance", "DCA between secondary tracks; DCA_{#pi_{+}#pi_{-}} [cm]; counts", 500, 0, 3);
   TH1F hl_over_dl("hl_over_dl", "#frac{L}{#Delta L}; #frac{L}{#Delta L}; counts", 200, 0, 100);
 
 
@@ -93,7 +93,7 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
     //candidates
     for (const auto& can_head : *can_header){
       //Candidates
-      if (can_head.GetField<int>(cangen) != 0) continue; //only singal, not background (gen=0)
+      if (can_head.GetField<int>(cangen) == 0) continue; //only singal, not background (gen=0)
       const float can_px = can_head.GetField<float>(canpx);
       const float can_py = can_head.GetField<float>(canpy);
       const float can_pz = can_head.GetField<float>(canpz);
@@ -196,4 +196,4 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
 
 
   fileOut1->Close();
-  
+}
