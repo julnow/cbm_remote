@@ -9,5 +9,5 @@ sbatch --job-name=pfreadinit \
         --partition main \
         --output=$LOGDIR/out/%j.out.log \
         --error=$LOGDIR/error/%j.err.log \
-        --array 1-100 \
+        --array 1-500 \
         -- $PWD/slurm_pfread_init.sh
