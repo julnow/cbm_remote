@@ -17,11 +17,12 @@ void hstack(const char *hName, const char *title, const char *stackName, TFile *
   stack->Add(sign);
   stack->Add(bckgr);
 
-  TCanvas *c = new TCanvas(stackName,stackName,1200,700);
+  TCanvas *c = new TCanvas(stackName,stackName,800,600);
+  gStyle->SetPalette(1);
+  c->SetLogy();
   TLegend *legend = new TLegend(0.75,0.75,0.95,0.95);
   legend->AddEntry(sign, "signal", "l");
   legend->AddEntry(bckgr, "background", "l");
-  gStyle->SetPalette(1);
   stack->Draw("plc pmc nostack E1 L");
   legend->Draw("same");
   c->Write();
@@ -33,7 +34,6 @@ void top_selection(const char *signFileName, const char *bckgrFilename){
 
   TFile signFile(signFileName);
   TFile bckgrFile(bckgrFilename);
-  gStyle->SetPalette(1);
 
   TFile* fileOut1 = TFile::Open("topo.root", "recreate");
   hstack("hchi2_geo", "#chi^{2} geometric; #chi^{2}_{geo}; counts", "stackhchi2_geo", &signFile, &bckgrFile);
