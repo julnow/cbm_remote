@@ -1,0 +1,13 @@
+
+.profile
+.root_hist
+._configuration.txt
+._make_fileslist.sh
+.bash_history
+.bash_logout
+.bashrc
+.DS_Store
+.mkshrc
+.ssh/authorized_keys
+.ssh/id_ed25519
+.ssh/known_hosts
