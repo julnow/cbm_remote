@@ -1,6 +1,6 @@
 
 //reading from pfsimple for each file
-void pfRead_initial(const char *fileName, const char *outputFileName){
+void pfRead_initial_bckgr(const char *fileName, const char *outputFileName){
 
   TFile* fileInPF = TFile::Open(fileName, "read");
   TTree* treeInPF = fileInPF->Get<TTree>("aTree");
@@ -74,14 +74,14 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
   TH2F hcorr_phi_pt("hcorr_phi_pt", "correlation K_{can} #phi pT; #phi [#circ]; pT [GeV/c]", 100, -5, 5,  100, -0.01, 5);\
   TH2F hcorr_px_py("hcorr_px_py", "correlations K_{can} px py; px [GeV/c]; py [GeV/c]", 100, -3, 3,  100, -3, 3);
   //chi2
-  TH1F hchi2_geo("hchi2_geo", "#chi^{2} geometric; #chi^{2}_{geo}; counts", 1000, -1, 20);
-  TH1F hchi2_prim_first("hchi2_prim_first", "#chi^{2} primary for #pi_{+}; #chi^{2}_{prim}; counts", 1000, 0, 1000);
-  TH1F hchi2_prim_second("hchi2_prim_second", "#chi^{2} primary for #pi_{-}; #chi^{2}_{prim}; counts", 1000, 0, 1000);
-  TH1F hchi2_topo("hchi2_topo", "#chi^{2} topological; #chi^{2}_{topo}; counts", 1000, -1, 25);
+  TH1F hchi2_geo("hchi2_geo", "#chi^{2} geometric; #chi^{2}_{geo}; counts", 2000, 0, 1000);
+  TH1F hchi2_prim_first("hchi2_prim_first", "#chi^{2} primary for #pi_{+}; #chi^{2}_{prim}; counts", 2000, 0, 1000);
+  TH1F hchi2_prim_second("hchi2_prim_second", "#chi^{2} primary for #pi_{-}; #chi^{2}_{prim}; counts", 2000, 0, 1000);
+  TH1F hchi2_topo("hchi2_topo", "#chi^{2} topological; #chi^{2}_{topo}; counts", 2000, 0, 1000);
   TH1F hcosine_first("hcosine_first", "cosine of angle between #pi_{+} and kaon; cos #alpha_{K #pi_{+}}; counts", 1000, .9, 1);
   TH1F hcosine_second("hcosine_second", "cosine of angle between #pi_{-} and kaon; cos #alpha_{K #pi_{+}}; counts", 1000, .9, 1);
-  TH1F hcosine_topo("hcosine_topo", "cosine topological; cos_{topo}; counts", 500, .9, 1);
-  TH1F hdistance("hdistance", "DCA between secondary tracks; DCA_{#pi_{+}#pi_{-}} [cm]; counts", 500, 0, 1.5);
+  TH1F hcosine_topo("hcosine_topo", "cosine topological; cos_{topo}; counts", 1000, -1, 1);
+  TH1F hdistance("hdistance", "DCA between secondary tracks; DCA_{#pi_{+}#pi_{-}} [cm]; counts", 500, 0, 6);
   TH1F hl_over_dl("hl_over_dl", "#frac{L}{#Delta L}; #frac{L}{#Delta L}; counts", 200, 0, 100);
 
 
@@ -93,7 +93,7 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
     //candidates
     for (const auto& can_head : *can_header){
       //Candidates
-     // if (can_head.GetField<int>(cangen) != 0) continue; //only singal, not background (gen=0)
+      if (can_head.GetField<int>(cangen) != 0) continue; //only background (gen=0)
       const float can_px = can_head.GetField<float>(canpx);
       const float can_py = can_head.GetField<float>(canpy);
       const float can_pz = can_head.GetField<float>(canpz);
@@ -196,3 +196,4 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
 
 
   fileOut1->Close();
+}

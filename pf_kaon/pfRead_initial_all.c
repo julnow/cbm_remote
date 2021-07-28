@@ -1,6 +1,6 @@
 
 //reading from pfsimple for each file
-void pfRead_initial(const char *fileName, const char *outputFileName){
+void pfRead_initial_all(const char *fileName, const char *outputFileName){
 
   TFile* fileInPF = TFile::Open(fileName, "read");
   TTree* treeInPF = fileInPF->Get<TTree>("aTree");
@@ -196,3 +196,4 @@ void pfRead_initial(const char *fileName, const char *outputFileName){
 
 
   fileOut1->Close();
+}
