@@ -7,4 +7,4 @@ export ROOT_INCLUDE_PATH=$ROOT_INCLUDE_PATH:/lustre/cbm/users/jnowak/AnalysisTre
 #for Pf_simple
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lustre/cbm/users/jnowak/pf_simple/install/external/lib/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lustre/cbm/users/jnowak/pf_simple/install/lib/
-
+export AnalysisTree_DIR=/lustre/cbm/users/jnowak/AnalysisTree/install/lib/cmake/AnalysisTree
